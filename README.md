@@ -89,6 +89,17 @@ docker compose up -d
 ```
 Kiểm tra nhanh trạng thái ứng dụng tại `http://localhost:8080/health-jsp` hoặc `http://localhost:8080/api/health`.
 
+### 5. Chi nhánh và tài khoản mẫu tự động khởi tạo ở chế độ dev
+
+Khi khởi động ở profile `dev` (`app.seed-demo-data: true`), `DemoDataSeeder` tự động tạo sẵn 3 chi nhánh (`HN-01` Hà Nội, `HCM-01` TP.HCM, `DN-01` Đà Nẵng) và 4 tài khoản mẫu (mật khẩu chung: `Password123!`):
+
+| Email | Mật khẩu | Vai trò | Chi nhánh gắn |
+|---|---|---|---|
+| `admin@techcommerce.store` | `Password123!` | `ADMIN` | Toàn hệ thống |
+| `staff.hn@techcommerce.store` | `Password123!` | `STAFF` | TechCommerce Hà Nội (`HN-01`) |
+| `staff.hcm@techcommerce.store` | `Password123!` | `STAFF` | TechCommerce TP.HCM (`HCM-01`) |
+| `customer@techcommerce.store` | `Password123!` | `CUSTOMER` | Khách hàng |
+
 ## Quy tắc làm việc nhóm với Git và biến môi trường
 
 1. **Nhánh làm việc**:

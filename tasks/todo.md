@@ -538,12 +538,12 @@ Quy ước người phụ trách:
 **Mô tả:** Tạo workflow `.github/workflows/ci.yml` tự động chạy trên mọi Pull Request vào `develop` và `main`: cài Java 17, cache Maven, chạy dịch vụ PostgreSQL 16 (service container) để chạy toàn bộ `mvn verify` và kiểm tra build Docker image không lỗi.
 
 **Tiêu chí nghiệm thu:**
-- [ ] Mở PR vào `develop` tự động kích hoạt workflow CI và báo trạng thái Pass/Fail ngay trên GitHub.
-- [ ] Build thất bại nếu có bất kỳ unit/integration test nào fail hoặc `Dockerfile` build lỗi.
+- [x] Mở PR vào `develop` tự động kích hoạt workflow CI và báo trạng thái Pass/Fail ngay trên GitHub.
+- [x] Build thất bại nếu có bất kỳ unit/integration test nào fail hoặc `Dockerfile` build lỗi.
 
 **Kiểm chứng:**
-- [ ] Tests pass: workflow CI xanh trên GitHub Actions với 1 PR thử nghiệm.
-- [ ] Build succeeds: bước `docker build` trong CI hoàn tất không cảnh báo lỗi.
+- [x] Tests pass: workflow CI xanh trên GitHub Actions với 1 PR thử nghiệm.
+- [x] Build succeeds: bước `docker build` trong CI hoàn tất không cảnh báo lỗi.
 - [ ] Manual check: thử tạo commit cố tình làm fail 1 test, xác nhận CI báo đỏ và chặn merge.
 
 **Phụ thuộc:** Task 1 (nên dựng sớm ngay sau Checkpoint Giai đoạn 1)
@@ -560,14 +560,14 @@ Quy ước người phụ trách:
 **Mô tả:** Tạo `Dockerfile` multi-stage (stage 1 build WAR bằng Maven, stage 2 chạy trên `eclipse-temurin:17-jre-alpine` với user non-root và healthcheck), `docker-compose.prod.yml` (Nginx + App + `cloudflared` chạy Named Tunnel bằng `CLOUDFLARE_TUNNEL_TOKEN` gắn tên miền cố định `https://techcommerce.store`, kết nối PostgreSQL 16 dùng chung trên Neon.tech với HikariCP phù hợp scale-to-zero), cấu hình `server.forward-headers-strategy=framework` và `.github/workflows/cd.yml` gồm 2 job tách biệt: `build-and-push` lên GHCR (`ubuntu-latest`) và `deploy` (`self-hosted` trên máy TV1 có `timeout-minutes: 5`, hỗ trợ `workflow_dispatch`).
 
 **Tiêu chí nghiệm thu:**
-- [ ] Image Docker hoàn chỉnh chạy ứng dụng bằng user non-root với giới hạn JVM `-Xms256m -Xmx512m`, không chứa mã nguồn hay Maven cache thừa, khởi động sạch và render được JSP.
-- [ ] `docker-compose.prod.yml` chạy tách biệt hoàn toàn với `docker-compose.yml` (không chiếm cổng `8080`/`5432` của máy dev, đặt `restart: unless-stopped`), kết nối ổn định tới Neon.tech PostgreSQL 16 vùng Singapore (`ap-southeast-1`, `sslmode=require`) và chạy được trên cả máy TV1 lẫn máy dự phòng với cùng dữ liệu.
-- [ ] Truy cập qua tên miền cố định `https://techcommerce.store` của Cloudflare Named Tunnel tải được JSP, tài nguyên tĩnh (đã bật `gzip on`, `Cache-Control` cho `/assets/**`, `limit_req_zone` chống spam trên `/auth/forgot-password` và đăng ký), upload ảnh Cloudinary (`client_max_body_size 10M`), nhận diện đúng HTTPS header và kết nối WebSocket (`wss://techcommerce.store/ws`) ổn định không bị 400/502.
-- [ ] Push/merge lên `main` tự động build, gắn tag theo commit SHA + `latest`, push lên GHCR; Self-hosted Runner (Windows Service trên máy TV1) tự động kéo image mới và cập nhật container bằng `docker compose -p techcommerce-prod -f docker-compose.prod.yml up -d`; có hướng dẫn cài UptimeRobot ping `https://techcommerce.store/health-jsp`.
+- [x] Image Docker hoàn chỉnh chạy ứng dụng bằng user non-root với giới hạn JVM `-Xms256m -Xmx512m`, không chứa mã nguồn hay Maven cache thừa, khởi động sạch và render được JSP.
+- [x] `docker-compose.prod.yml` chạy tách biệt hoàn toàn với `docker-compose.yml` (không chiếm cổng `8080`/`5432` của máy dev, đặt `restart: unless-stopped`), kết nối ổn định tới Neon.tech PostgreSQL 16 vùng Singapore (`ap-southeast-1`, `sslmode=require`) và chạy được trên cả máy TV1 lẫn máy dự phòng với cùng dữ liệu.
+- [x] Truy cập qua tên miền cố định `https://techcommerce.store` của Cloudflare Named Tunnel tải được JSP, tài nguyên tĩnh (đã bật `gzip on`, `Cache-Control` cho `/assets/**`, `limit_req_zone` chống spam trên `/auth/forgot-password` và đăng ký), upload ảnh Cloudinary (`client_max_body_size 10M`), nhận diện đúng HTTPS header và kết nối WebSocket (`wss://techcommerce.store/ws`) ổn định không bị 400/502.
+- [x] Push/merge lên `main` tự động build, gắn tag theo commit SHA + `latest`, push lên GHCR; Self-hosted Runner (Windows Service trên máy TV1) tự động kéo image mới và cập nhật container bằng `docker compose -p techcommerce-prod -f docker-compose.prod.yml up -d`; có hướng dẫn cài UptimeRobot ping `https://techcommerce.store/health-jsp`.
 
 **Kiểm chứng:**
-- [ ] Tests pass: kiểm tra container healthcheck `healthy` và endpoint `/health-jsp` trả 200 qua `https://techcommerce.store`.
-- [ ] Build succeeds: `docker build -t techcommerce:local .` và `docker compose -p techcommerce-prod -f docker-compose.prod.yml up -d`.
+- [x] Tests pass: kiểm tra container healthcheck `healthy` và endpoint `/health-jsp` trả 200 qua `https://techcommerce.store`.
+- [x] Build succeeds: `docker build -t techcommerce:local .` và `docker compose -p techcommerce-prod -f docker-compose.prod.yml up -d`.
 - [ ] Manual check: bật Self-hosted Runner trên máy TV1, đẩy 1 thay đổi nhỏ lên `main`, xác nhận `cd.yml` chạy xanh và thay đổi hiển thị trên `https://techcommerce.store`; thử tắt máy TV1 và bật container trên máy TV2 xác nhận tên miền sống lại với nguyên vẹn dữ liệu Neon.
 
 **Phụ thuộc:** Task 15, Task 19
