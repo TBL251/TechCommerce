@@ -22,22 +22,6 @@
 <body class="d-flex flex-column min-vh-100 bg-light">
 <a href="#main-content" class="skip-link visually-hidden-focusable">Chuyển tới nội dung chính</a>
 
-<!-- Thanh thông tin chi nhánh & cam kết dịch vụ -->
-<div class="tc-topbar bg-dark text-light py-1 d-none d-md-block">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center gap-3">
-            <span><i class="bi bi-geo-alt-fill text-info me-1" aria-hidden="true"></i>Hệ thống 3 chi nhánh: <strong class="text-white">Hà Nội · TP.HCM · Đà Nẵng</strong></span>
-            <span class="text-secondary">|</span>
-            <span><i class="bi bi-arrow-repeat text-success me-1" aria-hidden="true"></i>Đổi trả miễn phí trong 7 ngày</span>
-        </div>
-        <div class="d-flex align-items-center gap-3">
-            <a href="${pageContext.request.contextPath}/stores" class="text-decoration-none text-light">Tra cứu tồn kho chi nhánh</a>
-            <span class="text-secondary">|</span>
-            <span class="tc-mono text-info" translate="no">techcommerce.store</span>
-        </div>
-    </div>
-</div>
-
 <!-- Thanh điều hướng chính -->
 <header class="navbar navbar-expand-lg navbar-dark bg-dark tc-header sticky-top shadow-sm py-2">
     <div class="container">
@@ -191,26 +175,20 @@
 
 <footer class="tc-header bg-dark text-light py-4 mt-auto">
     <div class="container">
-        <div class="row g-4 align-items-center">
-            <div class="col-md-6">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
                 <div class="d-flex align-items-center gap-2 fw-bold mb-1" translate="no">
                     <span class="tc-brand-mark" style="width: 26px; height: 26px; font-size: 0.85rem;" aria-hidden="true"><i class="bi bi-cpu"></i></span>
                     <span>TechCommerce</span>
                 </div>
-                <p class="text-secondary small mb-0">
-                    Nền tảng thương mại điện tử thiết bị công nghệ đa chi nhánh. Đồng bộ tồn kho thời gian thực tại Hà Nội, TP.HCM và Đà Nẵng.
-                </p>
+                <p class="text-secondary small mb-0">Hà Nội · TP.HCM · Đà Nẵng · 08:00 – 21:30</p>
             </div>
-            <div class="col-md-6 text-md-end small">
-                <div class="d-flex flex-wrap justify-content-md-end gap-3 mb-1">
-                    <a href="${pageContext.request.contextPath}/" class="text-light text-decoration-none">Trang chủ</a>
-                    <a href="${pageContext.request.contextPath}/profile" class="text-light text-decoration-none">Sổ địa chỉ</a>
-                    <a href="${pageContext.request.contextPath}/auth/login" class="text-light text-decoration-none">Tài khoản</a>
-                    <a href="${pageContext.request.contextPath}/api/health" class="text-info text-decoration-none tc-mono">Trạng thái hệ thống: UP</a>
-                </div>
-                <div class="text-secondary">
-                    Triển khai qua Cloudflare Named Tunnel &amp; Supabase PostgreSQL · <span class="tc-mono" translate="no">https://techcommerce.store</span>
-                </div>
+            <div class="d-flex flex-wrap gap-3 small">
+                <a href="${pageContext.request.contextPath}/" class="text-light text-decoration-none">Trang chủ</a>
+                <a href="${pageContext.request.contextPath}/products" class="text-light text-decoration-none">Sản phẩm</a>
+                <a href="${pageContext.request.contextPath}/stores" class="text-light text-decoration-none">Chi nhánh</a>
+                <a href="${pageContext.request.contextPath}/orders" class="text-light text-decoration-none">Đơn hàng</a>
+                <a href="${pageContext.request.contextPath}/profile" class="text-light text-decoration-none">Tài khoản</a>
             </div>
         </div>
     </div>
