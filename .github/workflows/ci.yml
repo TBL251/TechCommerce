@@ -1,0 +1,47 @@
+name: CI - Test & Build Verification
+
+on:
+  pull_request:
+    branches: [ "develop", "main" ]
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  verify:
+    name: Maven Test & Docker Build Check
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: techcommerce
+          POSTGRES_USER: techcommerce
+          POSTGRES_PASSWORD: techcommerce_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U techcommerce -d techcommerce"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17 (Eclipse Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Run unit and integration tests
+        run: |
+          chmod +x mvnw
+          ./mvnw -B verify
+
+      - name: Verify production Docker image build
+        run: |
+          docker build -t techcommerce:ci .
