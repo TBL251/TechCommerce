@@ -7,6 +7,11 @@
 </head>
 <body>
 <div class="mb-4">
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="tc-step-pill tc-badge-primary">1. Thông tin tài khoản</span>
+        <i class="bi bi-chevron-right text-secondary small" aria-hidden="true"></i>
+        <span class="tc-step-pill tc-badge-neutral">2. Xác thực OTP Email</span>
+    </div>
     <h1 class="h4 fw-bold mb-1">Tạo tài khoản mới</h1>
     <p class="text-secondary small mb-0">Lưu sổ địa chỉ nhận hàng, theo dõi tiến trình đơn hàng và đổi trả trong 7&nbsp;ngày</p>
 </div>
@@ -24,20 +29,29 @@
     </c:if>
     <div class="mb-3">
         <label for="fullName" class="form-label">Họ và tên</label>
-        <input type="text" id="fullName" name="fullName" class="form-control" required
-               autocomplete="name" value="<c:out value='${fullName}'/>" placeholder="Nguyễn Văn A…">
+        <div class="input-group">
+            <span class="input-group-text bg-light text-secondary"><i class="bi bi-person" aria-hidden="true"></i></span>
+            <input type="text" id="fullName" name="fullName" class="form-control" required
+                   autocomplete="name" value="<c:out value='${fullName}'/>" placeholder="Nguyễn Văn A…">
+        </div>
     </div>
     <div class="mb-3">
-        <label for="email" class="form-label">Địa chỉ email</label>
-        <input type="email" id="email" name="email" class="form-control" required
-               autocomplete="email" inputmode="email" spellcheck="false"
-               value="<c:out value='${email}'/>" placeholder="tenban@example.com…">
+        <label for="email" class="form-label">Địa chỉ email nhận mã OTP</label>
+        <div class="input-group">
+            <span class="input-group-text bg-light text-secondary"><i class="bi bi-envelope" aria-hidden="true"></i></span>
+            <input type="email" id="email" name="email" class="form-control" required
+                   autocomplete="email" inputmode="email" spellcheck="false"
+                   value="<c:out value='${email}'/>" placeholder="tenban@example.com…">
+        </div>
     </div>
     <div class="mb-3">
         <label for="phone" class="form-label">Số điện thoại liên hệ</label>
-        <input type="tel" id="phone" name="phone" class="form-control tc-tabular"
-               autocomplete="tel" inputmode="tel"
-               value="<c:out value='${phone}'/>" placeholder="0901234567…">
+        <div class="input-group">
+            <span class="input-group-text bg-light text-secondary"><i class="bi bi-telephone" aria-hidden="true"></i></span>
+            <input type="tel" id="phone" name="phone" class="form-control tc-tabular"
+                   autocomplete="tel" inputmode="tel"
+                   value="<c:out value='${phone}'/>" placeholder="0901234567…">
+        </div>
     </div>
     <div class="row g-2 mb-3">
         <div class="col-sm-6">

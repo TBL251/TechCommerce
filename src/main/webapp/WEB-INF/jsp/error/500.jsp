@@ -9,7 +9,13 @@
 <div class="row justify-content-center py-5 tc-hero-enter">
     <div class="col-12 col-md-8 col-lg-6">
         <div class="tc-card p-4 p-md-5 text-center">
-            <span class="tc-badge tc-badge-neutral tc-mono mb-3">MÃ TRẠNG THÁI 500</span>
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                 style="width: 56px; height: 56px; background-color: var(--tc-surface-subtle); color: var(--tc-ink-secondary); font-size: 1.5rem;">
+                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+            </div>
+            <div>
+                <span class="tc-badge tc-badge-neutral tc-mono mb-3">HTTP 500 · SERVER ERROR</span>
+            </div>
             <h1 class="h3 fw-bold mb-2">Không thể hoàn tất yêu cầu lúc này</h1>
             <p class="text-secondary mb-4">
                 <c:out value="${not empty errorMessage ? errorMessage : 'Hệ thống gặp sự cố tạm thời khi xử lý dữ liệu. Bạn hãy tải lại trang hoặc quay về trang chủ để tiếp tục.'}"/>

@@ -7,8 +7,12 @@
 </head>
 <body>
 <div class="mb-4">
+    <div class="d-inline-flex align-items-center gap-2 tc-badge tc-badge-primary mb-2">
+        <i class="bi bi-key-fill" aria-hidden="true"></i>
+        <span>Khôi phục quyền truy cập</span>
+    </div>
     <h1 class="h4 fw-bold mb-1">Khôi phục mật khẩu</h1>
-    <p class="small text-secondary mb-0">Nhập email đăng ký tài khoản của bạn. Hệ thống sẽ gửi liên kết đặt lại mật khẩu có hiệu lực trong 15&nbsp;phút.</p>
+    <p class="small text-secondary mb-0">Nhập email đăng ký tài khoản của bạn. Hệ thống sẽ gửi liên kết đặt lại mật khẩu dùng 1 lần (hiệu lực 15&nbsp;phút).</p>
 </div>
 
 <c:if test="${not empty error}">
@@ -30,8 +34,11 @@
     </c:if>
     <div class="mb-3">
         <label for="email" class="form-label">Email tài khoản</label>
-        <input type="email" id="email" name="email" class="form-control" required
-               autocomplete="email" inputmode="email" spellcheck="false" placeholder="tenban@example.com…">
+        <div class="input-group">
+            <span class="input-group-text bg-light text-secondary"><i class="bi bi-envelope" aria-hidden="true"></i></span>
+            <input type="email" id="email" name="email" class="form-control" required
+                   autocomplete="email" inputmode="email" spellcheck="false" placeholder="tenban@example.com…">
+        </div>
     </div>
     <button type="submit" class="btn btn-primary w-100 py-2">
         <i class="bi bi-send" aria-hidden="true"></i>

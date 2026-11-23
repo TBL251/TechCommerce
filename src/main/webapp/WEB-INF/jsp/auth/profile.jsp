@@ -3,18 +3,47 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Hồ sơ &amp; Sổ địa chỉ - TechCommerce</title>
+    <title>Hồ sơ cá nhân &amp; Sổ địa chỉ - TechCommerce</title>
 </head>
 <body>
 <div class="row g-4 tc-hero-enter">
-    <div class="col-12 d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-        <div>
-            <h1 class="h3 fw-bold mb-1">Hồ sơ cá nhân &amp; Sổ địa chỉ</h1>
-            <p class="text-secondary small mb-0">Quản lý thông tin liên hệ, bảo mật mật khẩu và địa chỉ nhận hàng mặc định</p>
-        </div>
-        <div class="mt-2 mt-md-0 d-flex align-items-center gap-2">
-            <span class="tc-badge tc-badge-primary"><c:out value="${user.role}"/></span>
-            <span class="tc-badge tc-badge-neutral tc-mono">Phương thức: <c:out value="${not empty user.authProvider ? user.authProvider : 'LOCAL'}"/></span>
+    <%-- Top Profile Summary Banner (Stitch Design) --%>
+    <div class="col-12">
+        <div class="tc-hero-surface p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="tc-avatar-circle" aria-hidden="true">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div>
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                        <h1 class="h4 fw-bold mb-0"><c:out value="${user.fullName}"/></h1>
+                        <span class="tc-badge tc-badge-primary"><c:out value="${user.role}"/></span>
+                        <span class="tc-badge tc-badge-neutral tc-mono">
+                            <i class="bi bi-shield-check text-success" aria-hidden="true"></i>
+                            <c:out value="${not empty user.authProvider ? user.authProvider : 'LOCAL'}"/>
+                        </span>
+                    </div>
+                    <div class="text-secondary small">
+                        <span class="tc-mono"><c:out value="${user.email}"/></span>
+                        <c:if test="${not empty user.phone}">
+                            <span class="mx-1">·</span>
+                            <span class="tc-mono"><c:out value="${user.phone}"/></span>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <c:if test="${user.role == 'ADMIN' || user.role == 'STAFF'}">
+                    <a href="${pageContext.request.contextPath}/admin/users" class="btn btn-sm btn-primary">
+                        <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                        <span>Bảng điều khiển quản trị</span>
+                    </a>
+                </c:if>
+                <a href="${pageContext.request.contextPath}/stores" class="btn btn-sm btn-light border">
+                    <i class="bi bi-shop text-primary" aria-hidden="true"></i>
+                    <span>Showroom: <c:out value="${not empty currentStore ? currentStore.code : 'Toàn chuỗi'}"/></span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -35,12 +64,15 @@
         </div>
     </c:if>
 
-    <!-- Cột trái: Thông tin cá nhân & Đổi mật khẩu -->
+    <%-- Cột trái (5 cột): Thông tin cá nhân & Bảo mật mật khẩu --%>
     <div class="col-12 col-lg-5">
         <section class="tc-card mb-4" aria-labelledby="profile-info-heading">
-            <div class="tc-card-header d-flex align-items-center gap-2">
-                <i class="bi bi-person-badge text-primary" aria-hidden="true"></i>
-                <h2 id="profile-info-heading" class="h6 fw-bold mb-0">Thông tin tài khoản</h2>
+            <div class="tc-card-header d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-person-badge text-primary" aria-hidden="true"></i>
+                    <h2 id="profile-info-heading" class="h6 fw-bold mb-0">Thông tin tài khoản</h2>
+                </div>
+                <span class="tc-badge tc-badge-neutral">Định danh</span>
             </div>
             <div class="p-4">
                 <form action="${pageContext.request.contextPath}/profile/update" method="post">
@@ -49,8 +81,11 @@
                     </c:if>
                     <div class="mb-3">
                         <label for="profileEmail" class="form-label text-secondary">Email đăng nhập (cố định)</label>
-                        <input type="email" id="profileEmail" class="form-control bg-light tc-mono"
-                               value="<c:out value='${user.email}'/>" readonly>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-secondary"><i class="bi bi-lock-fill" aria-hidden="true"></i></span>
+                            <input type="email" id="profileEmail" class="form-control bg-light tc-mono"
+                                   value="<c:out value='${user.email}'/>" readonly>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="fullName" class="form-label">Họ và tên</label>
@@ -58,11 +93,11 @@
                                autocomplete="name" value="<c:out value='${user.fullName}'/>">
                     </div>
                     <div class="mb-3">
-                        <label for="phone" class="form-label">Số điện thoại</label>
+                        <label for="phone" class="form-label">Số điện thoại liên hệ</label>
                         <input type="tel" id="phone" name="phone" class="form-control tc-tabular"
                                autocomplete="tel" inputmode="tel" value="<c:out value='${user.phone}'/>" placeholder="0901234567…">
                     </div>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary w-100">
                         <i class="bi bi-check2" aria-hidden="true"></i>
                         <span>Lưu thông tin hồ sơ</span>
                     </button>
@@ -72,10 +107,10 @@
 
         <section class="tc-card" aria-labelledby="password-heading">
             <div class="tc-card-header d-flex align-items-center gap-2">
-                <i class="bi bi-key text-primary" aria-hidden="true"></i>
+                <i class="bi bi-shield-lock text-primary" aria-hidden="true"></i>
                 <h2 id="password-heading" class="h6 fw-bold mb-0">
                     <c:choose>
-                        <c:when test="${not empty user.passwordHash}">Đổi mật khẩu đăng nhập</c:when>
+                        <c:when test="${not empty user.passwordHash}">Bảo mật &amp; Đổi mật khẩu</c:when>
                         <c:otherwise>Thiết lập mật khẩu cho tài khoản Google</c:otherwise>
                     </c:choose>
                 </h2>
@@ -102,8 +137,8 @@
                         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
                                minlength="8" required autocomplete="new-password" placeholder="Nhập lại mật khẩu mới…">
                     </div>
-                    <button type="submit" class="btn btn-outline-primary">
-                        <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-key" aria-hidden="true"></i>
                         <span>Cập nhật mật khẩu</span>
                     </button>
                 </form>
@@ -111,12 +146,12 @@
         </section>
     </div>
 
-    <!-- Cột phải: Sổ địa chỉ giao hàng -->
+    <%-- Cột phải (7 cột): Sổ địa chỉ giao hàng --%>
     <div class="col-12 col-lg-7">
         <section class="tc-card mb-4" aria-labelledby="address-book-heading">
             <div class="tc-card-header d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-geo-alt text-primary" aria-hidden="true"></i>
+                    <i class="bi bi-geo-alt-fill text-primary" aria-hidden="true"></i>
                     <h2 id="address-book-heading" class="h6 fw-bold mb-0">Sổ địa chỉ nhận hàng đã lưu</h2>
                 </div>
                 <span class="tc-badge tc-badge-neutral tc-tabular">Tối đa 5 địa chỉ</span>
@@ -133,19 +168,20 @@
                     <c:otherwise>
                         <div class="d-grid gap-3">
                             <c:forEach var="addr" items="${addresses}">
-                                <div class="p-3 rounded border ${addr.defaultAddress ? 'border-primary bg-light' : 'bg-white'} d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                                <div class="p-3 rounded-3 ${addr.defaultAddress ? 'tc-card-selected' : 'border bg-white'} d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
                                     <div>
                                         <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
                                             <span class="fw-bold"><c:out value="${addr.recipientName}"/></span>
                                             <span class="text-secondary">·</span>
                                             <span class="tc-mono fw-semibold text-dark"><c:out value="${addr.phone}"/></span>
                                             <c:if test="${addr.defaultAddress}">
-                                                <span class="tc-badge tc-badge-primary">
-                                                    <i class="bi bi-check2-circle" aria-hidden="true"></i> Mặc định
+                                                <span class="tc-badge tc-badge-success">
+                                                    <i class="bi bi-check2-circle" aria-hidden="true"></i>Địa chỉ mặc định
                                                 </span>
                                             </c:if>
                                         </div>
                                         <div class="small text-secondary">
+                                            <i class="bi bi-geo-alt me-1 text-primary" aria-hidden="true"></i>
                                             <c:out value="${addr.addressLine}"/>, <strong class="text-dark"><c:out value="${addr.city}"/></strong>
                                         </div>
                                     </div>
@@ -179,7 +215,7 @@
 
         <section class="tc-card" aria-labelledby="add-address-heading">
             <div class="tc-card-header d-flex align-items-center gap-2">
-                <i class="bi bi-plus-circle text-primary" aria-hidden="true"></i>
+                <i class="bi bi-plus-circle-fill text-primary" aria-hidden="true"></i>
                 <h2 id="add-address-heading" class="h6 fw-bold mb-0">Thêm địa chỉ nhận hàng mới</h2>
             </div>
             <div class="p-4">

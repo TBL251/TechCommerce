@@ -9,7 +9,13 @@
 <div class="row justify-content-center py-5 tc-hero-enter">
     <div class="col-12 col-md-8 col-lg-6">
         <div class="tc-card p-4 p-md-5 text-center">
-            <span class="tc-badge tc-badge-danger tc-mono mb-3">MÃ TRẠNG THÁI 403</span>
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                 style="width: 56px; height: 56px; background-color: var(--tc-danger-soft); color: var(--tc-danger); font-size: 1.5rem;">
+                <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
+            </div>
+            <div>
+                <span class="tc-badge tc-badge-danger tc-mono mb-3">HTTP 403 · FORBIDDEN</span>
+            </div>
             <h1 class="h3 fw-bold mb-2">Khu vực giới hạn quyền truy cập</h1>
             <p class="text-secondary mb-4">
                 <c:out value="${not empty errorMessage ? errorMessage : 'Tài khoản hiện tại của bạn không có quyền thực hiện thao tác hoặc truy cập dữ liệu của chi nhánh này.'}"/>

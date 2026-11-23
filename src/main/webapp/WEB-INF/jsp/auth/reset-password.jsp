@@ -7,8 +7,12 @@
 </head>
 <body>
 <div class="mb-4">
+    <div class="d-inline-flex align-items-center gap-2 tc-badge tc-badge-success mb-2">
+        <i class="bi bi-shield-check" aria-hidden="true"></i>
+        <span>Đặt lại mật khẩu bảo mật</span>
+    </div>
     <h1 class="h4 fw-bold mb-1">Thiết lập mật khẩu mới</h1>
-    <p class="small text-secondary mb-0">Sau khi cập nhật, toàn bộ các phiên đăng nhập cũ sẽ được thu hồi để bảo vệ tài khoản.</p>
+    <p class="small text-secondary mb-0">Sau khi cập nhật, toàn bộ các phiên Refresh Token cũ trên thiết bị khác sẽ tự động bị thu hồi.</p>
 </div>
 
 <c:if test="${not empty error}">
@@ -25,13 +29,19 @@
     <input type="hidden" name="token" value="<c:out value='${token}'/>"/>
     <div class="mb-3">
         <label for="newPassword" class="form-label">Mật khẩu mới (tối thiểu 8 ký tự)</label>
-        <input type="password" id="newPassword" name="newPassword" class="form-control"
-               minlength="8" required autocomplete="new-password" placeholder="Nhập mật khẩu mới…">
+        <div class="input-group">
+            <span class="input-group-text bg-light text-secondary"><i class="bi bi-lock" aria-hidden="true"></i></span>
+            <input type="password" id="newPassword" name="newPassword" class="form-control"
+                   minlength="8" required autocomplete="new-password" placeholder="Nhập mật khẩu mới…">
+        </div>
     </div>
     <div class="mb-3">
         <label for="confirmPassword" class="form-label">Xác nhận mật khẩu mới</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-               minlength="8" required autocomplete="new-password" placeholder="Nhập lại mật khẩu mới…">
+        <div class="input-group">
+            <span class="input-group-text bg-light text-secondary"><i class="bi bi-lock-fill" aria-hidden="true"></i></span>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                   minlength="8" required autocomplete="new-password" placeholder="Nhập lại mật khẩu mới…">
+        </div>
     </div>
     <button type="submit" class="btn btn-primary w-100 py-2">
         <i class="bi bi-check2-circle" aria-hidden="true"></i>

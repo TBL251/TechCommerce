@@ -12,36 +12,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/assets/css/main.css?v=2.1" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/css/main.css?v=3.0" rel="stylesheet">
     <c:if test="${not empty _csrf}">
         <meta name="_csrf" content="${_csrf.token}"/>
         <meta name="_csrf_header" content="${_csrf.headerName}"/>
     </c:if>
     <sitemesh:write property="head"/>
 </head>
-<body class="bg-light">
+<body>
 <a href="#admin-main-content" class="skip-link visually-hidden-focusable">Chuyển tới vùng làm việc chính</a>
 
 <div class="d-flex min-vh-100">
-    <!-- Sidebar quản trị trên màn hình lớn (Desktop) -->
-    <aside class="tc-admin-sidebar bg-dark text-white p-3 d-none d-lg-flex flex-column">
+    <!-- Sidebar quản trị trên màn hình lớn (Desktop Obsidian Shell) -->
+    <aside class="tc-admin-sidebar text-white p-3 d-none d-lg-flex flex-column">
         <a href="${pageContext.request.contextPath}/admin/users" class="text-white text-decoration-none fw-bold fs-5 mb-3 d-flex align-items-center gap-2" translate="no">
             <span class="tc-brand-mark" aria-hidden="true"><i class="bi bi-cpu"></i></span>
             <div>
                 <div class="lh-1">TechCommerce</div>
-                <small class="text-info fw-normal" style="font-size: 0.72rem;">Trung tâm vận hành</small>
+                <small class="text-info fw-normal" style="font-size: 0.72rem;">Trung tâm vận hành đa chi nhánh</small>
             </div>
         </a>
 
         <c:if test="${not empty currentUser}">
-            <div class="p-2 rounded mb-3" style="background-color: var(--tc-dark-surface); border: 1px solid #263449;">
-                <div class="fw-semibold small text-white text-truncate"><c:out value="${currentUser.fullName}"/></div>
-                <div class="text-secondary text-truncate" style="font-size: 0.75rem;"><c:out value="${currentUser.email}"/></div>
-                <div class="d-flex align-items-center gap-2 mt-1">
+            <div class="p-3 rounded-3 mb-3" style="background-color: var(--tc-dark-surface); border: 1px solid var(--tc-dark-border);">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="tc-status-dot" aria-hidden="true"></span>
+                    <div class="fw-semibold small text-white text-truncate"><c:out value="${currentUser.fullName}"/></div>
+                </div>
+                <div class="text-secondary tc-mono text-truncate" style="font-size: 0.73rem;"><c:out value="${currentUser.email}"/></div>
+                <div class="d-flex align-items-center gap-2 mt-2">
                     <span class="badge bg-primary" style="font-size: 0.7rem;"><c:out value="${currentUser.role}"/></span>
-                    <c:if test="${not empty currentUser.storeId}">
-                        <span class="badge bg-dark border border-secondary tc-mono" style="font-size: 0.7rem;">Chi nhánh #<c:out value="${currentUser.storeId}"/></span>
-                    </c:if>
+                    <c:choose>
+                        <c:when test="${not empty currentUser.storeId}">
+                            <span class="badge bg-dark border border-secondary tc-mono" style="font-size: 0.7rem;">Chi nhánh #<c:out value="${currentUser.storeId}"/></span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="badge bg-dark border border-secondary tc-mono" style="font-size: 0.7rem;">Toàn chuỗi HQ</span>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </c:if>
@@ -108,7 +116,7 @@
 
         <div class="mt-auto pt-3 border-top border-secondary d-grid gap-2">
             <a href="${pageContext.request.contextPath}/" class="btn btn-sm btn-outline-info">
-                <i class="bi bi-storefront" aria-hidden="true"></i><span>Mở trang bán hàng</span>
+                <i class="bi bi-shop" aria-hidden="true"></i><span>Mở trang bán hàng</span>
             </a>
             <form action="${pageContext.request.contextPath}/auth/logout" method="post">
                 <c:if test="${not empty _csrf}">
@@ -123,21 +131,26 @@
 
     <!-- Nội dung chính -->
     <div class="flex-grow-1 d-flex flex-column min-w-0">
-        <header class="bg-white border-bottom px-3 px-lg-4 py-2 d-flex justify-content-between align-items-center sticky-top">
+        <header class="bg-white border-bottom px-3 px-lg-4 py-2 d-flex justify-content-between align-items-center sticky-top shadow-xs">
             <div class="d-flex align-items-center gap-2">
-                <a href="${pageContext.request.contextPath}/" class="btn btn-sm btn-outline-secondary d-lg-none" aria-label="Về trang chủ">
+                <a href="${pageContext.request.contextPath}/" class="btn btn-sm btn-light border d-lg-none" aria-label="Về trang chủ">
                     <i class="bi bi-house" aria-hidden="true"></i>
                 </a>
-                <span class="fw-semibold text-secondary small">Hệ thống điều hành đa chi nhánh · <span class="tc-mono text-dark">HN-01 / HCM-01 / DN-01</span></span>
+                <span class="tc-status-dot d-none d-sm-inline-block" aria-hidden="true"></span>
+                <span class="fw-semibold text-secondary small">Trung tâm điều hành chuỗi · <span class="tc-mono text-dark">HN-01 / HCM-01 / DN-01</span></span>
             </div>
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <a href="${pageContext.request.contextPath}/stores" class="btn btn-sm btn-light border d-none d-md-inline-flex">
+                    <i class="bi bi-geo-alt text-primary" aria-hidden="true"></i>
+                    <span>3 Showroom</span>
+                </a>
                 <span id="admin-notification-bell" class="btn btn-sm btn-light border position-relative" role="status" aria-label="Thông báo đơn hàng và hoàn trả theo thời gian thực">
                     <i class="bi bi-bell" aria-hidden="true"></i>
                     <span class="tc-status-dot ms-1" aria-hidden="true"></span>
                 </span>
                 <a href="${pageContext.request.contextPath}/profile" class="btn btn-sm btn-light border">
                     <i class="bi bi-person-gear" aria-hidden="true"></i>
-                    <span class="d-none d-sm-inline">Tài khoản</span>
+                    <span class="d-none d-sm-inline">Hồ sơ cá nhân</span>
                 </a>
             </div>
         </header>

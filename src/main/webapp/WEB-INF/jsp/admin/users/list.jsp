@@ -7,15 +7,16 @@
 </head>
 <body>
 <div class="tc-hero-enter">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+    <%-- 1. Page Header --%>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
             <h1 class="h4 fw-bold mb-1">Nhân sự chi nhánh &amp; Tài khoản người dùng</h1>
-            <p class="text-secondary small mb-0">Cấp quyền STAFF gắn theo từng chi nhánh vật lý và kiểm soát trạng thái phiên đăng nhập</p>
+            <p class="text-secondary small mb-0">Cấp quyền STAFF gắn trực tiếp theo từng showroom vật lý và kiểm soát trạng thái phiên đăng nhập</p>
         </div>
-        <div class="mt-2 mt-md-0">
-            <span class="tc-badge tc-badge-neutral tc-tabular">
-                <i class="bi bi-database-check text-success" aria-hidden="true"></i>
-                Đồng bộ Supabase PostgreSQL
+        <div class="d-flex align-items-center gap-2">
+            <span class="tc-badge tc-badge-success tc-tabular">
+                <span class="tc-status-dot" aria-hidden="true"></span>
+                PostgreSQL · JWT Refresh Rotation
             </span>
         </div>
     </div>
@@ -33,11 +34,48 @@
         </div>
     </c:if>
 
-    <!-- Biểu mẫu tạo tài khoản STAFF gắn chi nhánh -->
+    <%-- 2. 3 KPI Summary Cards (Stitch Design) --%>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="tc-metric-tile h-100 d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="small text-secondary fw-semibold text-uppercase" style="font-size: 0.73rem;">Tổng số tài khoản</div>
+                    <div class="h4 fw-bold tc-mono mb-0 mt-1"><c:out value="${not empty users ? users.size() : 0}"/></div>
+                    <div class="small text-secondary mt-1">Đồng bộ trên toàn hệ thống</div>
+                </div>
+                <span class="tc-category-icon" aria-hidden="true"><i class="bi bi-people-fill"></i></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="tc-metric-tile h-100 d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="small text-secondary fw-semibold text-uppercase" style="font-size: 0.73rem;">Chi nhánh vận hành</div>
+                    <div class="h4 fw-bold tc-mono mb-0 mt-1"><c:out value="${not empty stores ? stores.size() : 3}"/> Showroom</div>
+                    <div class="small text-secondary mt-1"><span class="tc-mono">HN-01 · HCM-01 · DN-01</span></div>
+                </div>
+                <span class="tc-category-icon" aria-hidden="true"><i class="bi bi-shop-window"></i></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="tc-metric-tile h-100 d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="small text-secondary fw-semibold text-uppercase" style="font-size: 0.73rem;">Cơ chế bảo mật phiên</div>
+                    <div class="h5 fw-bold mb-0 mt-1 text-success">Thu hồi tức thì</div>
+                    <div class="small text-secondary mt-1">Tự hủy Refresh Token khi khóa</div>
+                </div>
+                <span class="tc-category-icon" aria-hidden="true"><i class="bi bi-shield-lock-fill"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <%-- 3. Biểu mẫu tạo tài khoản STAFF gắn chi nhánh --%>
     <section class="tc-card mb-4" aria-labelledby="create-staff-heading">
-        <div class="tc-card-header d-flex align-items-center gap-2">
-            <i class="bi bi-person-plus-fill text-primary" aria-hidden="true"></i>
-            <h2 id="create-staff-heading" class="h6 fw-bold mb-0">Cấp tài khoản Nhân viên chi nhánh mới (STAFF)</h2>
+        <div class="tc-card-header d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-person-plus-fill text-primary" aria-hidden="true"></i>
+                <h2 id="create-staff-heading" class="h6 fw-bold mb-0">Cấp tài khoản Nhân viên chi nhánh mới (STAFF)</h2>
+            </div>
+            <span class="tc-badge tc-badge-primary">Bắt buộc gán Showroom</span>
         </div>
         <div class="p-4">
             <form action="${pageContext.request.contextPath}/admin/users/staff" method="post" class="row g-3 align-items-end">
@@ -78,9 +116,9 @@
         </div>
     </section>
 
-    <!-- Bảng danh sách tài khoản toàn hệ thống -->
+    <%-- 4. Bảng danh sách tài khoản toàn hệ thống --%>
     <section class="tc-card" aria-labelledby="users-table-heading">
-        <div class="tc-card-header d-flex justify-content-between align-items-center">
+        <div class="tc-card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-table text-primary" aria-hidden="true"></i>
                 <h2 id="users-table-heading" class="h6 fw-bold mb-0">Danh sách tài khoản trên hệ thống</h2>
@@ -88,8 +126,8 @@
             <span class="small text-secondary">Khóa tài khoản sẽ tự động thu hồi toàn bộ Refresh Token đang hoạt động</span>
         </div>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0 small">
-                <thead class="table-light">
+            <table class="table table-hover tc-table align-middle mb-0 small">
+                <thead>
                 <tr>
                     <th scope="col" class="ps-4">ID</th>
                     <th scope="col">Email đăng nhập</th>
@@ -128,7 +166,8 @@
                                             <c:set var="matchedStoreName" value="${st.name} (${st.code})"/>
                                         </c:if>
                                     </c:forEach>
-                                    <span class="tc-mono fw-medium">
+                                    <span class="tc-badge tc-badge-neutral tc-mono">
+                                        <i class="bi bi-shop text-primary" aria-hidden="true"></i>
                                         <c:out value="${not empty matchedStoreName ? matchedStoreName : 'Chi nhánh #'.concat(u.storeId)}"/>
                                     </span>
                                 </c:when>
@@ -141,11 +180,13 @@
                             <c:choose>
                                 <c:when test="${u.enabled}">
                                     <span class="tc-badge tc-badge-success">
-                                        <span class="tc-status-dot" aria-hidden="true"></span> Hoạt động
+                                        <span class="tc-status-dot" aria-hidden="true"></span>Hoạt động
                                     </span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="tc-badge tc-badge-danger">Đã khóa</span>
+                                    <span class="tc-badge tc-badge-danger">
+                                        <span class="tc-status-dot-danger" aria-hidden="true"></span>Đã khóa
+                                    </span>
                                 </c:otherwise>
                             </c:choose>
                         </td>
