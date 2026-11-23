@@ -3,17 +3,10 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Đăng nhập tài khoản - TechCommerce</title>
+    <title>Đăng nhập - TechCommerce</title>
 </head>
 <body>
-<div class="mb-4">
-    <div class="d-inline-flex align-items-center gap-2 tc-badge tc-badge-primary mb-2">
-        <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
-        <span>Xác thực đồng bộ toàn chuỗi</span>
-    </div>
-    <h1 class="h4 fw-bold mb-1">Đăng nhập tài khoản</h1>
-    <p class="text-secondary small mb-0">Truy cập giỏ hàng đồng bộ, sổ địa chỉ nhận hàng và bảng điều khiển chi nhánh</p>
-</div>
+<h1 class="h4 fw-bold mb-3">Đăng nhập</h1>
 
 <c:if test="${not empty error}">
     <div class="alert alert-danger py-2 px-3 small d-flex align-items-center gap-2" role="alert" aria-live="polite">
@@ -33,23 +26,19 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </c:if>
     <div class="mb-3">
-        <label for="email" class="form-label">Email đăng nhập</label>
-        <div class="input-group">
-            <span class="input-group-text bg-light text-secondary"><i class="bi bi-envelope" aria-hidden="true"></i></span>
-            <input type="email" id="email" name="email" class="form-control" required
-                   autocomplete="email" inputmode="email" spellcheck="false"
-                   value="<c:out value='${email}'/>" placeholder="tenban@techcommerce.store…">
-        </div>
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-control" required
+               autocomplete="email" inputmode="email" spellcheck="false"
+               value="<c:out value='${email}'/>" placeholder="tenban@example.com">
     </div>
     <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-1">
             <label for="password" class="form-label mb-0">Mật khẩu</label>
-            <a href="${pageContext.request.contextPath}/auth/forgot-password" class="small text-decoration-none fw-medium">Quên mật khẩu?</a>
+            <a href="${pageContext.request.contextPath}/auth/forgot-password" class="small text-decoration-none">Quên mật khẩu?</a>
         </div>
         <div class="input-group">
-            <span class="input-group-text bg-light text-secondary"><i class="bi bi-lock" aria-hidden="true"></i></span>
             <input type="password" id="password" name="password" class="form-control" required
-                   autocomplete="current-password" placeholder="Nhập mật khẩu của bạn…">
+                   autocomplete="current-password" placeholder="Nhập mật khẩu">
             <button class="btn btn-light border" type="button" id="togglePwdBtn"
                     aria-label="Hiện hoặc ẩn mật khẩu"
                     onclick="const p=document.getElementById('password'); const i=this.querySelector('i'); if(p.type==='password'){p.type='text';i.className='bi bi-eye-slash';}else{p.type='password';i.className='bi bi-eye';}">
@@ -58,64 +47,41 @@
         </div>
     </div>
     <button type="submit" id="loginSubmitBtn" class="btn btn-primary w-100 py-2">
-        <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
         <span>Đăng nhập</span>
     </button>
 </form>
 
-<div class="d-flex align-items-center my-3">
-    <hr class="flex-grow-1 my-0">
-    <span class="small text-secondary px-2">hoặc tiếp tục với</span>
-    <hr class="flex-grow-1 my-0">
-</div>
-
 <a href="${pageContext.request.contextPath}/oauth2/authorization/google"
    class="btn btn-light border w-100 d-flex align-items-center justify-content-center gap-2 mb-3">
     <i class="bi bi-google text-danger" aria-hidden="true"></i>
-    <span>Đăng nhập bằng tài khoản Google</span>
+    <span>Tiếp tục với Google</span>
 </a>
 
-<!-- Khối điền nhanh tài khoản mẫu phục vụ chấm điểm & kiểm thử -->
-<div class="tc-surface-subtle p-3 mb-3">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <span class="small fw-semibold text-dark"><i class="bi bi-terminal me-1 text-primary" aria-hidden="true"></i>Điền nhanh tài khoản mẫu (Demo)</span>
-        <span class="tc-mono text-secondary" style="font-size: 0.75rem;">Password123!</span>
-    </div>
-    <div class="row g-1">
-        <div class="col-6">
-            <button type="button" class="btn btn-sm btn-white border bg-white w-100 justify-content-start"
-                    onclick="document.getElementById('email').value='admin@techcommerce.store';document.getElementById('password').value='Password123!';">
-                <span class="tc-status-dot" aria-hidden="true"></span>
-                <span>Admin chuỗi</span>
-            </button>
-        </div>
-        <div class="col-6">
-            <button type="button" class="btn btn-sm btn-white border bg-white w-100 justify-content-start"
-                    onclick="document.getElementById('email').value='staff.hn@techcommerce.store';document.getElementById('password').value='Password123!';">
-                <span class="badge bg-secondary tc-mono" style="font-size: 0.65rem;">HN-01</span>
-                <span>Staff Hà Nội</span>
-            </button>
-        </div>
-        <div class="col-6">
-            <button type="button" class="btn btn-sm btn-white border bg-white w-100 justify-content-start"
-                    onclick="document.getElementById('email').value='staff.hcm@techcommerce.store';document.getElementById('password').value='Password123!';">
-                <span class="badge bg-secondary tc-mono" style="font-size: 0.65rem;">HCM-01</span>
-                <span>Staff TP.HCM</span>
-            </button>
-        </div>
-        <div class="col-6">
-            <button type="button" class="btn btn-sm btn-white border bg-white w-100 justify-content-start"
-                    onclick="document.getElementById('email').value='customer@techcommerce.store';document.getElementById('password').value='Password123!';">
-                <i class="bi bi-person text-primary" aria-hidden="true"></i>
-                <span>Khách hàng</span>
-            </button>
-        </div>
+<div class="tc-surface-subtle p-2 px-3 mb-3">
+    <div class="small text-secondary mb-1">Tài khoản thử nghiệm:</div>
+    <div class="d-flex flex-wrap gap-1">
+        <button type="button" class="btn btn-sm btn-white border bg-white"
+                onclick="document.getElementById('email').value='admin@techcommerce.store';document.getElementById('password').value='Password123!';">
+            Admin
+        </button>
+        <button type="button" class="btn btn-sm btn-white border bg-white"
+                onclick="document.getElementById('email').value='staff.hn@techcommerce.store';document.getElementById('password').value='Password123!';">
+            Staff HN
+        </button>
+        <button type="button" class="btn btn-sm btn-white border bg-white"
+                onclick="document.getElementById('email').value='staff.hcm@techcommerce.store';document.getElementById('password').value='Password123!';">
+            Staff HCM
+        </button>
+        <button type="button" class="btn btn-sm btn-white border bg-white"
+                onclick="document.getElementById('email').value='customer@techcommerce.store';document.getElementById('password').value='Password123!';">
+            Khách hàng
+        </button>
     </div>
 </div>
 
 <p class="text-center small text-secondary mb-0">
     Chưa có tài khoản?
-    <a href="${pageContext.request.contextPath}/auth/register" class="fw-semibold text-decoration-none">Tạo tài khoản khách hàng</a>
+    <a href="${pageContext.request.contextPath}/auth/register" class="fw-semibold text-decoration-none">Đăng ký</a>
 </p>
 </body>
 </html>

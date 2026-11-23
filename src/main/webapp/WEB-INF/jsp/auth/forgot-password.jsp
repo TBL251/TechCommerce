@@ -3,16 +3,12 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Khôi phục mật khẩu - TechCommerce</title>
+    <title>Quên mật khẩu - TechCommerce</title>
 </head>
 <body>
-<div class="mb-4">
-    <div class="d-inline-flex align-items-center gap-2 tc-badge tc-badge-primary mb-2">
-        <i class="bi bi-key-fill" aria-hidden="true"></i>
-        <span>Khôi phục quyền truy cập</span>
-    </div>
-    <h1 class="h4 fw-bold mb-1">Khôi phục mật khẩu</h1>
-    <p class="small text-secondary mb-0">Nhập email đăng ký tài khoản của bạn. Hệ thống sẽ gửi liên kết đặt lại mật khẩu dùng 1 lần (hiệu lực 15&nbsp;phút).</p>
+<div class="mb-3">
+    <h1 class="h4 fw-bold mb-1">Quên mật khẩu</h1>
+    <p class="small text-secondary mb-0">Nhập email để nhận liên kết đặt lại mật khẩu.</p>
 </div>
 
 <c:if test="${not empty error}">
@@ -33,23 +29,17 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </c:if>
     <div class="mb-3">
-        <label for="email" class="form-label">Email tài khoản</label>
-        <div class="input-group">
-            <span class="input-group-text bg-light text-secondary"><i class="bi bi-envelope" aria-hidden="true"></i></span>
-            <input type="email" id="email" name="email" class="form-control" required
-                   autocomplete="email" inputmode="email" spellcheck="false" placeholder="tenban@example.com…">
-        </div>
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-control" required
+               autocomplete="email" inputmode="email" spellcheck="false" placeholder="tenban@example.com">
     </div>
     <button type="submit" class="btn btn-primary w-100 py-2">
-        <i class="bi bi-send" aria-hidden="true"></i>
-        <span>Gửi liên kết đặt lại mật khẩu</span>
+        <span>Gửi liên kết</span>
     </button>
 </form>
 
 <p class="text-center small mb-0">
-    <a href="${pageContext.request.contextPath}/auth/login" class="text-decoration-none fw-medium">
-        <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>Quay lại trang đăng nhập
-    </a>
+    <a href="${pageContext.request.contextPath}/auth/login" class="text-decoration-none">Quay lại đăng nhập</a>
 </p>
 </body>
 </html>

@@ -3,22 +3,14 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Xác thực mã OTP Email - TechCommerce</title>
+    <title>Xác nhận email - TechCommerce</title>
 </head>
 <body>
-<div class="mb-4">
-    <div class="d-flex align-items-center gap-2 mb-2">
-        <span class="tc-step-pill tc-badge-success"><i class="bi bi-check2" aria-hidden="true"></i>1. Thông tin</span>
-        <i class="bi bi-chevron-right text-secondary small" aria-hidden="true"></i>
-        <span class="tc-step-pill tc-badge-primary">2. Xác thực OTP Email</span>
-    </div>
-    <h1 class="h4 fw-bold mb-1">Xác thực mã OTP Email</h1>
-    <div class="tc-surface-subtle p-3 mt-2 small">
-        <i class="bi bi-envelope-paper-fill text-primary me-1" aria-hidden="true"></i>
-        Mã xác nhận gồm 6 chữ số đã được gửi tới
-        <span class="fw-bold tc-mono text-dark"><c:out value="${maskedEmail}"/></span>
-        (hiệu lực trong 10&nbsp;phút).
-    </div>
+<div class="mb-3">
+    <h1 class="h4 fw-bold mb-1">Nhập mã xác nhận</h1>
+    <p class="text-secondary small mb-0">
+        Mã 6 chữ số đã gửi tới <strong class="tc-mono text-dark"><c:out value="${maskedEmail}"/></strong>.
+    </p>
 </div>
 
 <c:if test="${not empty error}">
@@ -35,28 +27,21 @@
     </c:if>
     <input type="hidden" name="email" value="<c:out value='${email}'/>"/>
 
-    <div class="mb-4">
-        <label for="otp" class="form-label fw-semibold d-flex justify-content-between">
-            <span>Mã xác thực OTP (6 chữ số)</span>
-            <span class="tc-mono text-secondary fw-normal">Tối đa 5 lần thử</span>
-        </label>
+    <div class="mb-3">
+        <label for="otp" class="form-label">Mã OTP</label>
         <input type="text" id="otp" name="otp" class="form-control tc-otp-input tc-tabular text-center"
                inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required autofocus
-               placeholder="000000" autocomplete="one-time-code" aria-describedby="otpHint">
-        <div id="otpHint" class="form-text text-center mt-2">
-            Nhập đúng 6 chữ số từ hộp thư đến (hoặc thư mục Quảng cáo / Spam).
-        </div>
+               placeholder="000000" autocomplete="one-time-code">
     </div>
 
-    <button type="submit" class="btn btn-primary w-100 py-2 mb-2">
-        <i class="bi bi-shield-check" aria-hidden="true"></i>
-        <span>Xác nhận và tạo tài khoản</span>
+    <button type="submit" class="btn btn-primary w-100 py-2">
+        <span>Xác nhận</span>
     </button>
 </form>
 
 <p class="text-center small text-secondary mb-0">
-    Chưa nhận được mã hoặc nhập sai email?
-    <a href="${pageContext.request.contextPath}/auth/register" class="fw-semibold text-decoration-none">Đăng ký lại để nhận mã mới</a>
+    Chưa nhận được mã?
+    <a href="${pageContext.request.contextPath}/auth/register" class="fw-semibold text-decoration-none">Gửi lại mã</a>
 </p>
 </body>
 </html>

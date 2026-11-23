@@ -3,18 +3,10 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Đăng ký tài khoản - TechCommerce</title>
+    <title>Đăng ký - TechCommerce</title>
 </head>
 <body>
-<div class="mb-4">
-    <div class="d-flex align-items-center gap-2 mb-2">
-        <span class="tc-step-pill tc-badge-primary">1. Thông tin tài khoản</span>
-        <i class="bi bi-chevron-right text-secondary small" aria-hidden="true"></i>
-        <span class="tc-step-pill tc-badge-neutral">2. Xác thực OTP Email</span>
-    </div>
-    <h1 class="h4 fw-bold mb-1">Tạo tài khoản mới</h1>
-    <p class="text-secondary small mb-0">Lưu sổ địa chỉ nhận hàng, theo dõi tiến trình đơn hàng và đổi trả trong 7&nbsp;ngày</p>
-</div>
+<h1 class="h4 fw-bold mb-3">Tạo tài khoản</h1>
 
 <c:if test="${not empty error}">
     <div class="alert alert-danger py-2 px-3 small d-flex align-items-center gap-2" role="alert" aria-live="polite">
@@ -29,51 +21,41 @@
     </c:if>
     <div class="mb-3">
         <label for="fullName" class="form-label">Họ và tên</label>
-        <div class="input-group">
-            <span class="input-group-text bg-light text-secondary"><i class="bi bi-person" aria-hidden="true"></i></span>
-            <input type="text" id="fullName" name="fullName" class="form-control" required
-                   autocomplete="name" value="<c:out value='${fullName}'/>" placeholder="Nguyễn Văn A…">
-        </div>
+        <input type="text" id="fullName" name="fullName" class="form-control" required
+               autocomplete="name" value="<c:out value='${fullName}'/>" placeholder="Nguyễn Văn A">
     </div>
     <div class="mb-3">
-        <label for="email" class="form-label">Địa chỉ email nhận mã OTP</label>
-        <div class="input-group">
-            <span class="input-group-text bg-light text-secondary"><i class="bi bi-envelope" aria-hidden="true"></i></span>
-            <input type="email" id="email" name="email" class="form-control" required
-                   autocomplete="email" inputmode="email" spellcheck="false"
-                   value="<c:out value='${email}'/>" placeholder="tenban@example.com…">
-        </div>
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-control" required
+               autocomplete="email" inputmode="email" spellcheck="false"
+               value="<c:out value='${email}'/>" placeholder="tenban@example.com">
     </div>
     <div class="mb-3">
-        <label for="phone" class="form-label">Số điện thoại liên hệ</label>
-        <div class="input-group">
-            <span class="input-group-text bg-light text-secondary"><i class="bi bi-telephone" aria-hidden="true"></i></span>
-            <input type="tel" id="phone" name="phone" class="form-control tc-tabular"
-                   autocomplete="tel" inputmode="tel"
-                   value="<c:out value='${phone}'/>" placeholder="0901234567…">
-        </div>
+        <label for="phone" class="form-label">Số điện thoại</label>
+        <input type="tel" id="phone" name="phone" class="form-control tc-tabular"
+               autocomplete="tel" inputmode="tel"
+               value="<c:out value='${phone}'/>" placeholder="0901234567">
     </div>
     <div class="row g-2 mb-3">
         <div class="col-sm-6">
             <label for="password" class="form-label">Mật khẩu</label>
             <input type="password" id="password" name="password" class="form-control"
-                   minlength="8" required autocomplete="new-password" placeholder="Tối thiểu 8 ký tự…">
+                   minlength="8" required autocomplete="new-password" placeholder="Tối thiểu 8 ký tự">
         </div>
         <div class="col-sm-6">
             <label for="confirmPassword" class="form-label">Nhập lại mật khẩu</label>
             <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                   minlength="8" required autocomplete="new-password" placeholder="Khớp mật khẩu trên…">
+                   minlength="8" required autocomplete="new-password" placeholder="Nhập lại mật khẩu">
         </div>
     </div>
     <button type="submit" class="btn btn-primary w-100 py-2">
-        <i class="bi bi-envelope-check" aria-hidden="true"></i>
-        <span>Gửi mã xác nhận qua email</span>
+        <span>Gửi mã xác nhận</span>
     </button>
 </form>
 
 <p class="text-center small text-secondary mb-0">
     Đã có tài khoản?
-    <a href="${pageContext.request.contextPath}/auth/login" class="fw-semibold text-decoration-none">Đăng nhập ngay</a>
+    <a href="${pageContext.request.contextPath}/auth/login" class="fw-semibold text-decoration-none">Đăng nhập</a>
 </p>
 </body>
 </html>

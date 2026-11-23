@@ -6,13 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0b1120">
-    <title><sitemesh:write property="title" default="TechCommerce - Hệ thống bán lẻ thiết bị công nghệ đa chi nhánh"/></title>
+    <title><sitemesh:write property="title" default="TechCommerce - Thiết bị công nghệ chính hãng"/></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/assets/css/main.css?v=3.0" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/css/main.css?v=3.1" rel="stylesheet">
     <c:if test="${not empty _csrf}">
         <meta name="_csrf" content="${_csrf.token}"/>
         <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -22,15 +22,11 @@
 <body class="d-flex flex-column min-vh-100">
 <a href="#main-content" class="skip-link visually-hidden-focusable">Chuyển tới nội dung chính</a>
 
-<!-- Thanh điều hướng chính (Dark Obsidian Command Header) -->
 <header class="navbar navbar-expand-lg navbar-dark tc-header sticky-top shadow-sm py-2">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2 me-3" href="${pageContext.request.contextPath}/" translate="no">
             <span class="tc-brand-mark" aria-hidden="true"><i class="bi bi-cpu"></i></span>
-            <div class="d-flex flex-column">
-                <span class="lh-1">TechCommerce</span>
-                <span class="text-info fw-normal tc-mono" style="font-size: 0.68rem; letter-spacing: 0.02em;">HN-01 · HCM-01 · DN-01</span>
-            </div>
+            <span>TechCommerce</span>
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
@@ -39,70 +35,51 @@
         </button>
 
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <!-- Bộ chọn chi nhánh mua sắm -->
+            <!-- Bộ chọn chi nhánh -->
             <div class="dropdown me-lg-3 my-2 my-lg-0">
-                <button class="tc-branch-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Chọn chi nhánh mua sắm">
+                <button class="tc-branch-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Chọn chi nhánh">
                     <span class="tc-status-dot" aria-hidden="true"></span>
                     <i class="bi bi-geo-alt-fill text-info" aria-hidden="true"></i>
-                    <span>
-                        <c:choose>
-                            <c:when test="${not empty currentStore}">
-                                <c:out value="${currentStore.name}"/> (<span class="tc-mono"><c:out value="${currentStore.code}"/></span>)
-                            </c:when>
-                            <c:otherwise>Chi nhánh: Toàn hệ thống</c:otherwise>
-                        </c:choose>
-                    </span>
+                    <span><c:out value="${not empty currentStore ? currentStore.name : 'Toàn hệ thống'}"/></span>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-secondary mt-2" style="min-width: 280px;">
-                    <li class="dropdown-header small text-secondary d-flex justify-content-between align-items-center">
-                        <span>Chọn điểm xem tồn kho &amp; nhận hàng</span>
-                        <span class="tc-mono text-info">3 MIỀN</span>
-                    </li>
+                <ul class="dropdown-menu dropdown-menu-dark shadow border-secondary mt-1">
                     <li>
-                        <a class="dropdown-item d-flex justify-content-between align-items-center gap-3 py-2 ${empty currentStore ? 'active' : ''}"
+                        <a class="dropdown-item d-flex justify-content-between align-items-center gap-3 ${empty currentStore ? 'active' : ''}"
                            href="${pageContext.request.contextPath}/stores/select?code=ALL">
-                            <div>
-                                <div class="fw-medium">Toàn hệ thống (3 chi nhánh)</div>
-                                <div class="small text-secondary" style="font-size: 0.74rem;">Xem tổng hợp tồn kho toàn quốc</div>
-                            </div>
+                            <span>Toàn hệ thống</span>
                             <span class="badge bg-secondary tc-mono">ALL</span>
                         </a>
                     </li>
-                    <li><hr class="dropdown-divider border-secondary my-1"></li>
                     <c:forEach var="storeItem" items="${activeStores}">
                         <li>
-                            <a class="dropdown-item d-flex justify-content-between align-items-center gap-3 py-2 ${not empty currentStore and currentStore.id == storeItem.id ? 'active' : ''}"
+                            <a class="dropdown-item d-flex justify-content-between align-items-center gap-3 ${not empty currentStore and currentStore.id == storeItem.id ? 'active' : ''}"
                                href="${pageContext.request.contextPath}/stores/select?storeId=${storeItem.id}">
-                                <div>
-                                    <div class="fw-medium"><c:out value="${storeItem.name}"/></div>
-                                    <div class="small text-secondary text-truncate" style="max-width: 190px; font-size: 0.74rem;"><c:out value="${storeItem.address}"/></div>
-                                </div>
-                                <span class="badge bg-dark border border-secondary tc-mono"><c:out value="${storeItem.code}"/></span>
+                                <span><c:out value="${storeItem.name}"/></span>
+                                <span class="badge bg-secondary tc-mono"><c:out value="${storeItem.code}"/></span>
                             </a>
                         </li>
                     </c:forEach>
                     <c:if test="${empty activeStores}">
-                        <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/stores/select?code=HN-01">TechCommerce Hà Nội <span class="tc-mono text-info ms-1">HN-01</span></a></li>
-                        <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/stores/select?code=HCM-01">TechCommerce TP.HCM <span class="tc-mono text-info ms-1">HCM-01</span></a></li>
-                        <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/stores/select?code=DN-01">TechCommerce Đà Nẵng <span class="tc-mono text-info ms-1">DN-01</span></a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/stores/select?code=HN-01">TechCommerce Hà Nội <span class="tc-mono text-info ms-1">HN-01</span></a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/stores/select?code=HCM-01">TechCommerce TP.HCM <span class="tc-mono text-info ms-1">HCM-01</span></a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/stores/select?code=DN-01">TechCommerce Đà Nẵng <span class="tc-mono text-info ms-1">DN-01</span></a></li>
                     </c:if>
-                    <li><hr class="dropdown-divider border-secondary my-1"></li>
+                    <li><hr class="dropdown-divider border-secondary"></li>
                     <li>
-                        <a class="dropdown-item small text-info py-2 d-flex align-items-center justify-content-between" href="${pageContext.request.contextPath}/stores">
-                            <span><i class="bi bi-compass me-1" aria-hidden="true"></i>Xem danh bạ showroom &amp; giờ mở cửa</span>
-                            <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
+                        <a class="dropdown-item small text-info" href="${pageContext.request.contextPath}/stores">
+                            <i class="bi bi-compass me-1" aria-hidden="true"></i>Danh sách chi nhánh
                         </a>
                     </li>
                 </ul>
             </div>
 
-            <!-- Ô tìm kiếm tiếng Việt không dấu -->
+            <!-- Tìm kiếm -->
             <form class="d-flex flex-grow-1 position-relative me-lg-3 my-2 my-lg-0"
                   action="${pageContext.request.contextPath}/products" method="get" role="search">
                 <div class="input-group tc-search-group">
-                    <label for="search-input" class="visually-hidden">Tìm kiếm sản phẩm công nghệ</label>
+                    <label for="search-input" class="visually-hidden">Tìm kiếm sản phẩm</label>
                     <input id="search-input" class="form-control" type="search" name="q"
-                           placeholder="Tìm laptop, workstation, điện thoại, linh kiện theo kho…"
+                           placeholder="Tìm laptop, điện thoại, linh kiện…"
                            value="<c:out value='${param.q}'/>" autocomplete="off">
                     <button class="btn btn-primary px-3" type="submit" aria-label="Tìm kiếm">
                         <i class="bi bi-search" aria-hidden="true"></i>
@@ -111,28 +88,22 @@
                 <div id="search-suggestions" class="list-group position-absolute w-100 top-100 mt-1 shadow d-none" style="z-index: 1050;" aria-live="polite"></div>
             </form>
 
-            <!-- Tiện ích mua sắm & Tài khoản -->
+            <!-- Tiện ích & Tài khoản -->
             <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
                 <li class="nav-item">
-                    <a class="tc-nav-action" href="${pageContext.request.contextPath}/stores" aria-label="Hệ thống chi nhánh">
-                        <i class="bi bi-shop" aria-hidden="true"></i>
-                        <span class="d-lg-none d-xl-inline">Showroom</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="tc-nav-action" href="${pageContext.request.contextPath}/compare" aria-label="So sánh cấu hình sản phẩm">
+                    <a class="tc-nav-action" href="${pageContext.request.contextPath}/compare">
                         <i class="bi bi-sliders2" aria-hidden="true"></i>
                         <span class="d-lg-none d-xl-inline">So sánh</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="tc-nav-action" href="${pageContext.request.contextPath}/wishlist" aria-label="Danh sách sản phẩm yêu thích">
+                    <a class="tc-nav-action" href="${pageContext.request.contextPath}/wishlist">
                         <i class="bi bi-heart" aria-hidden="true"></i>
                         <span class="d-lg-none d-xl-inline">Yêu thích</span>
                     </a>
                 </li>
                 <li class="nav-item me-lg-2">
-                    <a class="tc-nav-action position-relative" href="${pageContext.request.contextPath}/cart" aria-label="Giỏ hàng của bạn">
+                    <a class="tc-nav-action position-relative" href="${pageContext.request.contextPath}/cart">
                         <i class="bi bi-bag-check" aria-hidden="true"></i>
                         <span>Giỏ hàng</span>
                         <span id="cart-badge" class="badge rounded-pill bg-primary tc-tabular" aria-live="polite">
@@ -146,36 +117,30 @@
                         <li class="nav-item dropdown">
                             <button class="btn btn-sm btn-outline-light dropdown-toggle d-flex align-items-center gap-2"
                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-check-fill text-info" aria-hidden="true"></i>
-                                <span class="text-truncate" style="max-width: 150px;"><c:out value="${currentUser.fullName}"/></span>
+                                <i class="bi bi-person-circle text-info" aria-hidden="true"></i>
+                                <span class="text-truncate" style="max-width: 140px;"><c:out value="${currentUser.fullName}"/></span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2" style="min-width: 245px;">
-                                <li class="px-3 py-2 border-bottom bg-light rounded-top">
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                                <li class="px-3 py-2 border-bottom">
                                     <div class="fw-semibold small text-dark"><c:out value="${currentUser.fullName}"/></div>
-                                    <div class="text-secondary tc-mono text-truncate" style="font-size: 0.74rem;"><c:out value="${currentUser.email}"/></div>
-                                    <div class="mt-1 d-flex align-items-center gap-1">
-                                        <span class="tc-badge tc-badge-primary"><c:out value="${currentUser.role}"/></span>
-                                        <c:if test="${not empty currentUser.storeId}">
-                                            <span class="tc-badge tc-badge-neutral tc-mono">Kho #<c:out value="${currentUser.storeId}"/></span>
-                                        </c:if>
-                                    </div>
+                                    <div class="text-secondary tc-mono text-truncate" style="font-size: 0.75rem;"><c:out value="${currentUser.email}"/></div>
                                 </li>
                                 <c:if test="${currentUser.role == 'ADMIN' || currentUser.role == 'STAFF'}">
                                     <li>
                                         <a class="dropdown-item fw-semibold text-primary py-2" href="${pageContext.request.contextPath}/admin/users">
-                                            <i class="bi bi-shield-lock me-2" aria-hidden="true"></i>Bảng điều khiển quản trị
+                                            <i class="bi bi-shield-lock me-2" aria-hidden="true"></i>Trang quản trị
                                         </a>
                                     </li>
                                     <li><hr class="dropdown-divider my-1"></li>
                                 </c:if>
                                 <li>
                                     <a class="dropdown-item py-2" href="${pageContext.request.contextPath}/profile">
-                                        <i class="bi bi-person-vcard me-2 text-secondary" aria-hidden="true"></i>Hồ sơ &amp; Sổ địa chỉ
+                                        <i class="bi bi-person-vcard me-2 text-secondary" aria-hidden="true"></i>Tài khoản &amp; Địa chỉ
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item py-2" href="${pageContext.request.contextPath}/orders">
-                                        <i class="bi bi-box-seam me-2 text-secondary" aria-hidden="true"></i>Đơn hàng &amp; Đổi trả
+                                        <i class="bi bi-box-seam me-2 text-secondary" aria-hidden="true"></i>Đơn hàng
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider my-1"></li>
@@ -185,7 +150,7 @@
                                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         </c:if>
                                         <button type="submit" class="btn btn-sm btn-outline-danger w-100 justify-content-start">
-                                            <i class="bi bi-box-arrow-right me-2" aria-hidden="true"></i>Đăng xuất phiên
+                                            <i class="bi bi-box-arrow-right me-2" aria-hidden="true"></i>Đăng xuất
                                         </button>
                                     </form>
                                 </li>
@@ -212,24 +177,18 @@
     </div>
 </main>
 
-<footer class="tc-header text-light py-4 mt-auto">
-    <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-            <div>
-                <div class="d-flex align-items-center gap-2 fw-bold mb-1" translate="no">
-                    <span class="tc-brand-mark" style="width: 28px; height: 28px; font-size: 0.88rem;" aria-hidden="true"><i class="bi bi-cpu"></i></span>
-                    <span>TechCommerce</span>
-                    <span class="badge bg-dark border border-secondary tc-mono fw-normal text-info">v3.0</span>
-                </div>
-                <p class="text-secondary small mb-0">Hệ thống bán lẻ thiết bị công nghệ 3 miền · Hà Nội (HN-01) · TP.HCM (HCM-01) · Đà Nẵng (DN-01) · Mở cửa 08:00 – 21:30</p>
-            </div>
-            <div class="d-flex flex-wrap gap-3 small">
-                <a href="${pageContext.request.contextPath}/" class="text-light text-decoration-none">Trang chủ</a>
-                <a href="${pageContext.request.contextPath}/products" class="text-light text-decoration-none">Sản phẩm</a>
-                <a href="${pageContext.request.contextPath}/stores" class="text-light text-decoration-none">Hệ thống chi nhánh</a>
-                <a href="${pageContext.request.contextPath}/orders" class="text-light text-decoration-none">Đơn hàng</a>
-                <a href="${pageContext.request.contextPath}/profile" class="text-light text-decoration-none">Tài khoản</a>
-            </div>
+<footer class="tc-header text-light py-3 mt-auto">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 small">
+        <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold" translate="no">TechCommerce</span>
+            <span class="text-secondary">· Hà Nội · TP.HCM · Đà Nẵng · 08:00 – 21:30</span>
+        </div>
+        <div class="d-flex flex-wrap gap-3">
+            <a href="${pageContext.request.contextPath}/" class="text-light text-decoration-none">Trang chủ</a>
+            <a href="${pageContext.request.contextPath}/products" class="text-light text-decoration-none">Sản phẩm</a>
+            <a href="${pageContext.request.contextPath}/stores" class="text-light text-decoration-none">Chi nhánh</a>
+            <a href="${pageContext.request.contextPath}/orders" class="text-light text-decoration-none">Đơn hàng</a>
+            <a href="${pageContext.request.contextPath}/profile" class="text-light text-decoration-none">Tài khoản</a>
         </div>
     </div>
 </footer>
