@@ -1,0 +1,31 @@
+name: techcommerce-dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: techcommerce-dev-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-techcommerce}
+      POSTGRES_USER: ${DB_USERNAME:-techcommerce}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-techcommerce_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-techcommerce} -d ${POSTGRES_DB:-techcommerce}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mailpit:
+    image: axllent/mailpit:v1.21
+    container_name: techcommerce-dev-mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  pgdata_dev:

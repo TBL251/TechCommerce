@@ -1,0 +1,29 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### Environment & Secrets ###
+.env
+.env.*
+!.env.example
+
+### IDE ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+
+### OS & Logs ###
+.DS_Store
+Thumbs.db
+*.log
+logs/
+.m2/
+graphify-out/
+
+
