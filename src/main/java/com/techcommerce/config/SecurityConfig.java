@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
@@ -86,8 +87,16 @@ public class SecurityConfig {
                     .scope("openid", "profile", "email")
                     .build();
             ClientRegistrationRepository repo = new InMemoryClientRegistrationRepository(googleReg);
+            DefaultOAuth2AuthorizationRequestResolver authorizationRequestResolver =
+                    new DefaultOAuth2AuthorizationRequestResolver(repo, "/oauth2/authorization");
+            authorizationRequestResolver.setAuthorizationRequestCustomizer(
+                    customizer -> customizer.additionalParameters(params -> params.put("prompt", "select_account consent"))
+            );
             http.oauth2Login(oauth -> oauth
                     .clientRegistrationRepository(repo)
+                    .authorizationEndpoint(authorization -> authorization
+                            .authorizationRequestResolver(authorizationRequestResolver)
+                    )
                     .loginPage("/auth/login")
                     .successHandler(oAuth2SuccessHandler)
             );
