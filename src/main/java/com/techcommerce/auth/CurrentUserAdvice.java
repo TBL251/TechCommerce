@@ -1,0 +1,19 @@
+package com.techcommerce.auth;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+@ControllerAdvice
+public class CurrentUserAdvice {
+
+    @ModelAttribute("currentUser")
+    public UserPrincipal currentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof UserPrincipal principal) {
+            return principal;
+        }
+        return null;
+    }
+}
