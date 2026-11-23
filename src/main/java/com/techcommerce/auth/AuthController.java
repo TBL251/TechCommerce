@@ -118,8 +118,11 @@ public class AuthController {
         userRepository.save(user);
 
         issueTokensAndMergeCart(user, request, response);
-        if ("ADMIN".equals(user.getRole()) || "STAFF".equals(user.getRole())) {
+        if ("ADMIN".equals(user.getRole())) {
             return "redirect:/admin/users";
+        }
+        if ("STAFF".equals(user.getRole())) {
+            return "redirect:/admin/dashboard";
         }
         return "redirect:/";
     }

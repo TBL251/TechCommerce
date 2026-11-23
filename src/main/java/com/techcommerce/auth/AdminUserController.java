@@ -21,7 +21,13 @@ public class AdminUserController {
         this.storeRepository = storeRepository;
     }
 
-    @GetMapping({"/admin", "/admin/dashboard", "/admin/users"})
+    @GetMapping({"/admin", "/admin/dashboard"})
+    public String dashboard(Model model) {
+        model.addAttribute("stores", storeRepository.findByActiveTrueOrderByIdAsc());
+        return "admin/dashboard";
+    }
+
+    @GetMapping("/admin/users")
     public String listUsers(Model model) {
         model.addAttribute("users", userService.listAllUsers());
         model.addAttribute("stores", storeRepository.findByActiveTrueOrderByIdAsc());

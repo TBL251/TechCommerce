@@ -252,7 +252,7 @@
                             <c:if test="${currentUser.role == 'ADMIN' || currentUser.role == 'STAFF'}">
                                 <li>
                                     <a class="dropdown-item flex items-center gap-2 py-2 text-xs font-semibold text-primary-container"
-                                       href="${pageContext.request.contextPath}/admin/users">
+                                       href="${pageContext.request.contextPath}${currentUser.role == 'ADMIN' ? '/admin/users' : '/admin/dashboard'}">
                                         <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
                                         <span>Trung tâm quản trị</span>
                                     </a>

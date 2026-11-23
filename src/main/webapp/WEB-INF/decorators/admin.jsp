@@ -93,7 +93,7 @@
 <aside class="fixed left-0 top-0 h-full w-[272px] bg-[#0b1120] text-inverse-on-surface z-50 hidden lg:flex flex-col justify-between shadow-lg">
     <div class="flex flex-col flex-1 overflow-y-auto">
         <div class="p-5 pb-4">
-            <a href="${pageContext.request.contextPath}/admin/users" class="flex items-center gap-3 text-decoration-none" translate="no">
+            <a href="${pageContext.request.contextPath}${currentUser.role == 'ADMIN' ? '/admin/users' : '/admin/dashboard'}" class="flex items-center gap-3 text-decoration-none" translate="no">
                 <div class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-headline font-bold text-base shadow-sm">
                     <span class="material-symbols-outlined text-[20px]">memory</span>
                 </div>
@@ -150,13 +150,13 @@
                 </a>
             </div>
 
-            <div class="space-y-1">
-                <div class="px-3 py-1 text-[11px] font-label font-semibold text-slate-400 uppercase tracking-wider">Quản trị toàn chuỗi</div>
-                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg bg-primary-container text-white font-semibold shadow-sm text-decoration-none transition-colors"
-                   href="${pageContext.request.contextPath}/admin/users">
-                    <span class="material-symbols-outlined text-[19px]">group</span>Nhân sự &amp; Người dùng
-                </a>
-                <c:if test="${empty currentUser || currentUser.role == 'ADMIN'}">
+            <c:if test="${currentUser.role == 'ADMIN'}">
+                <div class="space-y-1">
+                    <div class="px-3 py-1 text-[11px] font-label font-semibold text-slate-400 uppercase tracking-wider">Quản trị toàn chuỗi (ADMIN)</div>
+                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg bg-primary-container text-white font-semibold shadow-sm text-decoration-none transition-colors"
+                       href="${pageContext.request.contextPath}/admin/users">
+                        <span class="material-symbols-outlined text-[19px]">group</span>Nhân sự &amp; Cấp tài khoản STAFF
+                    </a>
                     <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
                        href="${pageContext.request.contextPath}/admin/stores">
                         <span class="material-symbols-outlined text-[19px]">hub</span>Hệ thống chi nhánh
@@ -169,8 +169,8 @@
                        href="${pageContext.request.contextPath}/admin/vouchers">
                         <span class="material-symbols-outlined text-[19px]">confirmation_number</span>Mã giảm giá
                     </a>
-                </c:if>
-            </div>
+                </div>
+            </c:if>
         </nav>
     </div>
 

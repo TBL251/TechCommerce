@@ -151,7 +151,7 @@ class AuthControllerTest {
         mockMvc.perform(get("/admin/users").cookie(accessCookie))
                 .andExpect(status().isForbidden());
 
-        // STAFF can enter the Admin Center (GET /admin/users, /admin/dashboard) but cannot mutate users (POST /admin/users/staff)
+        // STAFF can enter the Branch Admin Center (GET /admin/dashboard) but CANNOT access /admin/users or create staff (ADMIN only)
         Store store = storeRepository.findByCode("HN-01").orElseGet(() -> {
             Store st = new Store();
             st.setCode("HN-01");
@@ -174,14 +174,17 @@ class AuthControllerTest {
                         .param("email", "staff@techcommerce.store")
                         .param("password", "StaffPass123"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/users"))
+                .andExpect(redirectedUrl("/admin/dashboard"))
                 .andReturn();
 
         Cookie staffCookie = staffLogin.getResponse().getCookie(JwtService.ACCESS_COOKIE_NAME);
         assertThat(staffCookie).isNotNull();
 
-        mockMvc.perform(get("/admin/users").cookie(staffCookie))
+        mockMvc.perform(get("/admin/dashboard").cookie(staffCookie))
                 .andExpect(status().isOk());
+
+        mockMvc.perform(get("/admin/users").cookie(staffCookie))
+                .andExpect(status().isForbidden());
 
         mockMvc.perform(post("/admin/users/staff")
                         .with(csrf())

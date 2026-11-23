@@ -53,8 +53,7 @@ public class SecurityConfig {
                                 "/auth/**", "/error/**", "/health-jsp", "/api/health",
                                 "/assets/**", "/WEB-INF/**", "/favicon.ico"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/admin/users/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/stores/**", "/admin/catalog/**", "/admin/vouchers/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/users/**", "/admin/stores/**", "/admin/catalog/**", "/admin/vouchers/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**", "/staff/**").hasAnyRole("ADMIN", "STAFF")
                         .requestMatchers("/profile/**", "/checkout/**", "/orders/**", "/returns/**", "/chat/**").authenticated()
                         .anyRequest().permitAll()
