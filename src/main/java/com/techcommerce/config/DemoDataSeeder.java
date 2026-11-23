@@ -39,8 +39,43 @@ public class DemoDataSeeder implements ApplicationRunner {
     @Transactional
     public void run(ApplicationArguments args) {
         if (seedOnStartup) {
+            checkLocalEnvFileSync();
             seedIfEmpty();
         }
+    }
+
+    private void checkLocalEnvFileSync() {
+        try {
+            java.nio.file.Path examplePath = java.nio.file.Path.of(".env.example");
+            java.nio.file.Path envPath = java.nio.file.Path.of(".env");
+            if (!java.nio.file.Files.exists(examplePath)) {
+                return;
+            }
+            if (!java.nio.file.Files.exists(envPath)) {
+                log.warn("[CANH BAO .env] Chua tìm thấy file .env trên máy cá nhân. Hãy sao chép từ .env.example sang .env!");
+                return;
+            }
+            java.util.Set<String> exampleKeys = parseEnvKeys(examplePath);
+            java.util.Set<String> localKeys = parseEnvKeys(envPath);
+            exampleKeys.removeAll(localKeys);
+            if (!exampleKeys.isEmpty()) {
+                log.warn("[CANH BAO .env] File .env của bạn đang thiếu {} biến mới so với .env.example: {}. Hãy bổ sung vào .env!",
+                        exampleKeys.size(), exampleKeys);
+            }
+        } catch (Exception ignored) {
+            // Không chặn khởi động ứng dụng nếu không đọc được file
+        }
+    }
+
+    private static java.util.Set<String> parseEnvKeys(java.nio.file.Path path) throws java.io.IOException {
+        java.util.Set<String> keys = new java.util.LinkedHashSet<>();
+        for (String line : java.nio.file.Files.readAllLines(path)) {
+            String trimmed = line.trim();
+            if (!trimmed.isEmpty() && !trimmed.startsWith("#") && trimmed.contains("=")) {
+                keys.add(trimmed.substring(0, trimmed.indexOf('=')).trim());
+            }
+        }
+        return keys;
     }
 
     @Transactional

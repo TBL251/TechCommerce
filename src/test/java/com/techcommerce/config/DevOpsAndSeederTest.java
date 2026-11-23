@@ -86,4 +86,31 @@ class DevOpsAndSeederTest {
                 .contains("workflow_dispatch")
                 .contains("techcommerce-prod");
     }
+
+    @Test
+    void verifiesAllEnvVariablesInApplicationYmlHaveDefaultsAndExistInEnvExample() throws Exception {
+        java.util.Set<String> envExampleKeys = new java.util.LinkedHashSet<>();
+        for (String line : Files.readAllLines(Path.of(".env.example"))) {
+            String trimmed = line.trim();
+            if (!trimmed.isEmpty() && !trimmed.startsWith("#") && trimmed.contains("=")) {
+                envExampleKeys.add(trimmed.substring(0, trimmed.indexOf('=')).trim());
+            }
+        }
+
+        java.util.regex.Pattern placeholderPattern = java.util.regex.Pattern.compile("\\$\\{([A-Z0-9_]+)(:)?");
+        for (String ymlFile : java.util.List.of("src/main/resources/application.yml", "src/main/resources/application-dev.yml")) {
+            String content = Files.readString(Path.of(ymlFile));
+            java.util.regex.Matcher matcher = placeholderPattern.matcher(content);
+            while (matcher.find()) {
+                String varName = matcher.group(1);
+                String defaultPart = matcher.group(2);
+                assertThat(defaultPart)
+                        .as("Biến ${%s} trong %s bắt buộc phải có giá trị mặc định sau dấu ':' (ví dụ ${%s:})", varName, ymlFile, varName)
+                        .isNotNull();
+                assertThat(envExampleKeys)
+                        .as("Biến %s dùng trong %s bắt buộc phải được khai báo trong .env.example", varName, ymlFile)
+                        .contains(varName);
+            }
+        }
+    }
 }
