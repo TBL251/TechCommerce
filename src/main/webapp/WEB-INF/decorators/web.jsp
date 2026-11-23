@@ -91,9 +91,9 @@
 
 <!-- Stitch Dark Obsidian Header -->
 <header class="sticky top-0 left-0 right-0 w-full z-50 bg-[#0b1120] text-white border-b border-[#1e293b] shadow-sm">
-    <div class="h-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4 shrink-0">
-            <a class="flex items-center gap-2.5 text-white text-decoration-none hover:opacity-95 transition-opacity" href="${pageContext.request.contextPath}/" translate="no">
+    <div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 lg:gap-5">
+        <div class="flex items-center gap-3 lg:gap-4 shrink-0">
+            <a class="flex items-center gap-2 text-white text-decoration-none hover:opacity-95 transition-opacity" href="${pageContext.request.contextPath}/" translate="no">
                 <div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-white shadow-sm">
                     <span class="material-symbols-outlined text-[20px]">memory</span>
                 </div>
@@ -108,7 +108,7 @@
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    <span>
+                    <span class="truncate max-w-[175px]">
                         <c:choose>
                             <c:when test="${not empty currentStore}">
                                 <strong class="text-white font-mono"><c:out value="${currentStore.code}"/></strong> · <c:out value="${currentStore.name}"/>
@@ -153,15 +153,15 @@
             </div>
         </div>
 
-        <!-- Stitch Search Bar -->
-        <form class="flex-1 max-w-xl mx-auto relative hidden md:block"
+        <!-- Stitch Search Bar (Expanded Full Width) -->
+        <form class="flex-1 flex-grow-1 w-full min-w-[260px] lg:min-w-[380px] max-w-2xl relative hidden md:block my-0"
               action="${pageContext.request.contextPath}/products" method="get" role="search">
             <div class="relative flex items-center w-full">
                 <label for="search-input" class="visually-hidden">Tìm kiếm sản phẩm</label>
                 <span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px] pointer-events-none">search</span>
                 <input id="search-input" name="q" type="search" autocomplete="off"
                        value="<c:out value='${param.q}'/>"
-                       class="w-full h-10 pl-10 pr-12 rounded-lg bg-[#111c34] border border-[#1e293b] text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
+                       class="w-full h-10 pl-10 pr-12 rounded-lg bg-[#111c34] border border-[#1e293b] text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
                        placeholder="Tìm laptop, điện thoại, linh kiện PC, màn hình…">
                 <button type="submit" aria-label="Tìm kiếm"
                         class="absolute right-1.5 h-7 px-2.5 rounded-md bg-primary-container hover:bg-primary text-white text-xs flex items-center justify-center transition-colors border-0">
@@ -172,18 +172,13 @@
         </form>
 
         <!-- Stitch Right Navigation Actions -->
-        <nav class="flex items-center gap-4 lg:gap-5 shrink-0">
-            <a class="hidden lg:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white text-decoration-none transition-colors"
-               href="${pageContext.request.contextPath}/stores">
-                <span class="material-symbols-outlined text-[20px]">storefront</span>
-                <span>Chi nhánh</span>
-            </a>
-            <a class="hidden lg:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white text-decoration-none transition-colors"
+        <nav class="flex items-center gap-3 lg:gap-4 shrink-0">
+            <a class="hidden xl:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white text-decoration-none transition-colors"
                href="${pageContext.request.contextPath}/compare">
                 <span class="material-symbols-outlined text-[20px]">compare_arrows</span>
                 <span>So sánh</span>
             </a>
-            <a class="hidden lg:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white text-decoration-none transition-colors"
+            <a class="hidden xl:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white text-decoration-none transition-colors"
                href="${pageContext.request.contextPath}/wishlist">
                 <span class="material-symbols-outlined text-[20px]">favorite</span>
                 <span>Yêu thích</span>
