@@ -89,125 +89,160 @@
 <body class="bg-surface font-body text-on-surface min-h-screen flex flex-col antialiased">
 <a href="#main-content" class="skip-link visually-hidden-focusable">Chuyển tới nội dung chính</a>
 
-<!-- Stitch Dark Obsidian Header -->
-<header class="sticky top-0 left-0 right-0 w-full z-50 bg-[#0b1120] text-white border-b border-[#1e293b] shadow-sm">
-    <div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 lg:gap-5">
-        <div class="flex items-center gap-3 lg:gap-4 shrink-0">
-            <a class="flex items-center gap-2 text-white text-decoration-none hover:opacity-95 transition-opacity" href="${pageContext.request.contextPath}/" translate="no">
-                <div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-white shadow-sm">
-                    <span class="material-symbols-outlined text-[20px]">memory</span>
-                </div>
-                <span class="text-lg font-headline font-bold tracking-tight text-white">TechCommerce</span>
-            </a>
-
-            <!-- Stitch Interactive Branch Switcher Pill -->
-            <div class="dropdown">
-                <button class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1e293b]/90 border border-[#334155] text-xs font-medium text-slate-200 hover:bg-[#1e293b] hover:border-slate-500 transition-colors"
-                        type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Chọn chi nhánh mua sắm">
-                    <span class="flex h-2 w-2 relative">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span class="truncate max-w-[175px]">
-                        <c:choose>
-                            <c:when test="${not empty currentStore}">
-                                <strong class="text-white font-mono"><c:out value="${currentStore.code}"/></strong> · <c:out value="${currentStore.name}"/>
-                            </c:when>
-                            <c:otherwise>Chi nhánh: <strong class="text-white">Toàn hệ thống</strong></c:otherwise>
-                        </c:choose>
-                    </span>
-                    <span class="material-symbols-outlined text-[16px] text-slate-400">expand_more</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark bg-[#0f172a] border border-[#1e293b] rounded-xl shadow-xl py-2 mt-2" style="min-width: 260px;">
-                    <li class="px-3 py-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Chọn chi nhánh</li>
-                    <li>
-                        <a class="dropdown-item flex items-center justify-between px-3 py-2 text-xs ${empty currentStore ? 'active bg-[#1e293b] text-white' : 'text-slate-300'}"
-                           href="${pageContext.request.contextPath}/stores/select?code=ALL">
-                            <span>Toàn hệ thống</span>
-                            <span class="font-mono text-[10px] text-emerald-400">ALL</span>
-                        </a>
-                    </li>
-                    <c:forEach var="storeItem" items="${activeStores}">
-                        <li>
-                            <a class="dropdown-item flex items-center justify-between px-3 py-2 text-xs ${not empty currentStore and currentStore.id == storeItem.id ? 'active bg-[#1e293b] text-white' : 'text-slate-300'}"
-                               href="${pageContext.request.contextPath}/stores/select?storeId=${storeItem.id}">
-                                <span><c:out value="${storeItem.name}"/></span>
-                                <span class="font-mono text-[10px] text-emerald-400"><c:out value="${storeItem.code}"/></span>
-                            </a>
-                        </li>
-                    </c:forEach>
-                    <c:if test="${empty activeStores}">
-                        <li><a class="dropdown-item text-xs py-2" href="${pageContext.request.contextPath}/stores/select?code=HN-01">TechCommerce Hà Nội <span class="font-mono text-emerald-400 ms-2">HN-01</span></a></li>
-                        <li><a class="dropdown-item text-xs py-2" href="${pageContext.request.contextPath}/stores/select?code=HCM-01">TechCommerce TP.HCM <span class="font-mono text-emerald-400 ms-2">HCM-01</span></a></li>
-                        <li><a class="dropdown-item text-xs py-2" href="${pageContext.request.contextPath}/stores/select?code=DN-01">TechCommerce Đà Nẵng <span class="font-mono text-emerald-400 ms-2">DN-01</span></a></li>
-                    </c:if>
-                    <li><hr class="dropdown-divider border-[#1e293b] my-1"></li>
-                    <li>
-                        <a class="dropdown-item flex items-center justify-between px-3 py-2 text-xs text-primary-fixed hover:text-white"
-                           href="${pageContext.request.contextPath}/stores">
-                            <span>Xem hệ thống showroom</span>
-                            <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
-                        </a>
-                    </li>
-                </ul>
+<!-- Top Navigation Bar (CellphoneS-style clean layout on TechCommerce Sapphire/Obsidian theme) -->
+<header class="sticky top-0 left-0 right-0 w-full z-50 bg-[#0b1120] text-white border-b border-[#1e293b] shadow-md">
+    <div class="h-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
+        <!-- 1. Brand Logo -->
+        <a class="flex items-center gap-2 text-white text-decoration-none hover:opacity-95 transition-opacity shrink-0"
+           href="${pageContext.request.contextPath}/" translate="no">
+            <div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center text-white shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">memory</span>
             </div>
+            <span class="text-lg font-headline font-bold tracking-tight text-white hidden sm:inline">TechCommerce</span>
+        </a>
+
+        <!-- 2. Nút "Danh mục" Dropdown -->
+        <div class="dropdown shrink-0">
+            <button class="h-10 px-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-white text-sm font-medium flex items-center gap-2 transition-colors"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                <span>Danh mục</span>
+                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+            </button>
+            <ul class="dropdown-menu shadow-xl border border-slate-200 rounded-xl py-2 mt-2" style="min-width: 240px;">
+                <li>
+                    <a class="dropdown-item flex items-center gap-2.5 py-2 text-xs font-medium text-slate-700"
+                       href="${pageContext.request.contextPath}/products?q=laptop">
+                        <span class="material-symbols-outlined text-[18px] text-primary-container">laptop_mac</span>
+                        <span>Laptop &amp; Workstation</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item flex items-center gap-2.5 py-2 text-xs font-medium text-slate-700"
+                       href="${pageContext.request.contextPath}/products?q=dien+thoai">
+                        <span class="material-symbols-outlined text-[18px] text-primary-container">smartphone</span>
+                        <span>Điện thoại &amp; Tablet</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item flex items-center gap-2.5 py-2 text-xs font-medium text-slate-700"
+                       href="${pageContext.request.contextPath}/products?q=linh+kien">
+                        <span class="material-symbols-outlined text-[18px] text-primary-container">developer_board</span>
+                        <span>Linh kiện &amp; PC</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item flex items-center gap-2.5 py-2 text-xs font-medium text-slate-700"
+                       href="${pageContext.request.contextPath}/products?q=man+hinh">
+                        <span class="material-symbols-outlined text-[18px] text-primary-container">desktop_windows</span>
+                        <span>Màn hình &amp; Phụ kiện</span>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li>
+                    <a class="dropdown-item flex items-center gap-2.5 py-2 text-xs font-medium text-slate-700"
+                       href="${pageContext.request.contextPath}/compare">
+                        <span class="material-symbols-outlined text-[18px] text-slate-500">compare_arrows</span>
+                        <span>So sánh cấu hình</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item flex items-center gap-2.5 py-2 text-xs font-medium text-slate-700"
+                       href="${pageContext.request.contextPath}/wishlist">
+                        <span class="material-symbols-outlined text-[18px] text-slate-500">favorite</span>
+                        <span>Sản phẩm yêu thích</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
-        <!-- Stitch Search Bar (Expanded Full Width) -->
-        <form class="flex-1 flex-grow-1 w-full min-w-[260px] lg:min-w-[380px] max-w-2xl relative hidden md:block my-0"
+        <!-- 3. Nút Chọn Chi nhánh / Tỉnh thành -->
+        <div class="dropdown shrink-0">
+            <button class="h-10 px-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-white text-sm font-medium flex items-center gap-2 transition-colors"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Chọn chi nhánh mua sắm">
+                <span class="material-symbols-outlined text-[20px]">location_on</span>
+                <span class="truncate max-w-[140px]">
+                    <c:choose>
+                        <c:when test="${not empty currentStore}">
+                            <c:out value="${currentStore.city}"/>
+                        </c:when>
+                        <c:otherwise>Toàn quốc</c:otherwise>
+                    </c:choose>
+                </span>
+                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+            </button>
+            <ul class="dropdown-menu shadow-xl border border-slate-200 rounded-xl py-2 mt-2" style="min-width: 240px;">
+                <li>
+                    <a class="dropdown-item flex items-center justify-between px-3 py-2 text-xs font-medium ${empty currentStore ? 'active' : 'text-slate-700'}"
+                       href="${pageContext.request.contextPath}/stores/select?code=ALL">
+                        <span>Toàn hệ thống</span>
+                        <span class="font-mono text-[11px] opacity-75">ALL</span>
+                    </a>
+                </li>
+                <c:forEach var="storeItem" items="${activeStores}">
+                    <li>
+                        <a class="dropdown-item flex items-center justify-between px-3 py-2 text-xs font-medium ${not empty currentStore and currentStore.id == storeItem.id ? 'active' : 'text-slate-700'}"
+                           href="${pageContext.request.contextPath}/stores/select?storeId=${storeItem.id}">
+                            <span><c:out value="${storeItem.city}"/> (<c:out value="${storeItem.name}"/>)</span>
+                            <span class="font-mono text-[11px] opacity-75"><c:out value="${storeItem.code}"/></span>
+                        </a>
+                    </li>
+                </c:forEach>
+                <c:if test="${empty activeStores}">
+                    <li><a class="dropdown-item text-xs py-2" href="${pageContext.request.contextPath}/stores/select?code=HN-01">Hà Nội (HN-01)</a></li>
+                    <li><a class="dropdown-item text-xs py-2" href="${pageContext.request.contextPath}/stores/select?code=HCM-01">TP.HCM (HCM-01)</a></li>
+                    <li><a class="dropdown-item text-xs py-2" href="${pageContext.request.contextPath}/stores/select?code=DN-01">Đà Nẵng (DN-01)</a></li>
+                </c:if>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li>
+                    <a class="dropdown-item flex items-center justify-between px-3 py-2 text-xs font-semibold text-primary-container"
+                       href="${pageContext.request.contextPath}/stores">
+                        <span>Xem danh sách cửa hàng</span>
+                        <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 4. Ô tìm kiếm nền trắng rộng ở giữa ("Bạn muốn mua gì hôm nay?") -->
+        <form class="flex-1 flex-grow-1 min-w-[200px] relative my-0"
               action="${pageContext.request.contextPath}/products" method="get" role="search">
             <div class="relative flex items-center w-full">
-                <label for="search-input" class="visually-hidden">Tìm kiếm sản phẩm</label>
-                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px] pointer-events-none">search</span>
+                <label for="search-input" class="visually-hidden">Bạn muốn mua gì hôm nay?</label>
+                <button type="submit" aria-label="Tìm kiếm"
+                        class="absolute left-3 text-slate-600 hover:text-primary-container flex items-center justify-center p-0 border-0 bg-transparent">
+                    <span class="material-symbols-outlined text-[22px]">search</span>
+                </button>
                 <input id="search-input" name="q" type="search" autocomplete="off"
                        value="<c:out value='${param.q}'/>"
-                       class="w-full h-10 pl-10 pr-12 rounded-lg bg-[#111c34] border border-[#1e293b] text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
-                       placeholder="Tìm laptop, điện thoại, linh kiện PC, màn hình…">
-                <button type="submit" aria-label="Tìm kiếm"
-                        class="absolute right-1.5 h-7 px-2.5 rounded-md bg-primary-container hover:bg-primary text-white text-xs flex items-center justify-center transition-colors border-0">
-                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-                </button>
+                       class="w-full h-10 pl-10 pr-4 rounded-xl bg-white text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-container shadow-inner border-0"
+                       placeholder="Bạn muốn mua gì hôm nay?">
             </div>
             <div id="search-suggestions" class="list-group position-absolute w-100 top-100 mt-1 shadow d-none" style="z-index: 1050;" aria-live="polite"></div>
         </form>
 
-        <!-- Stitch Right Navigation Actions -->
-        <nav class="flex items-center gap-3 lg:gap-4 shrink-0">
-            <a class="hidden xl:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white text-decoration-none transition-colors"
-               href="${pageContext.request.contextPath}/compare">
-                <span class="material-symbols-outlined text-[20px]">compare_arrows</span>
-                <span>So sánh</span>
-            </a>
-            <a class="hidden xl:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white text-decoration-none transition-colors"
-               href="${pageContext.request.contextPath}/wishlist">
-                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                <span>Yêu thích</span>
-            </a>
-            <a class="flex items-center gap-2 text-xs text-slate-300 hover:text-white text-decoration-none transition-colors"
+        <!-- 5. Giỏ hàng & Nút Đăng nhập / Tài khoản -->
+        <div class="flex items-center gap-3 shrink-0">
+            <a class="h-10 px-2.5 rounded-xl hover:bg-white/10 flex items-center gap-2 text-sm font-medium text-white text-decoration-none transition-colors"
                href="${pageContext.request.contextPath}/cart" aria-label="Giỏ hàng">
+                <span class="hidden md:inline">Giỏ hàng</span>
                 <div class="relative flex items-center">
-                    <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
-                    <span id="cart-badge" class="absolute -top-1.5 -right-2 bg-primary-container text-white font-mono text-[10px] font-bold h-4 min-w-[16px] px-1 rounded-full flex items-center justify-center border-2 border-[#0b1120]">
-                        <c:out value="${cartCount != null ? cartCount : 0}"/>
-                    </span>
+                    <span class="material-symbols-outlined text-[23px]">shopping_cart</span>
+                    <c:if test="${not empty cartCount and cartCount > 0}">
+                        <span id="cart-badge" class="absolute -top-1.5 -right-2 bg-primary-container text-white font-mono text-[10px] font-bold h-4 min-w-[16px] px-1 rounded-full flex items-center justify-center">
+                            <c:out value="${cartCount}"/>
+                        </span>
+                    </c:if>
                 </div>
-                <span class="hidden sm:inline">Giỏ hàng</span>
             </a>
-
-            <div class="h-5 w-[1px] bg-[#1e293b] hidden sm:block"></div>
 
             <c:choose>
                 <c:when test="${not empty currentUser}">
                     <div class="dropdown">
-                        <button class="flex items-center gap-2.5 bg-transparent border-0 text-slate-200 hover:text-white transition-colors p-0"
+                        <button class="h-10 px-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-white text-sm font-medium flex items-center gap-2 transition-colors"
                                 type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0 border border-[#334155]">
-                                <span class="material-symbols-outlined text-white text-[18px]">person</span>
-                            </div>
-                            <div class="hidden sm:flex flex-col text-left">
-                                <span class="text-[10px] text-slate-400 leading-none"><c:out value="${currentUser.role}"/></span>
-                                <span class="text-xs font-semibold text-white truncate max-w-[130px]"><c:out value="${currentUser.fullName}"/></span>
-                            </div>
+                            <span class="truncate max-w-[120px]"><c:out value="${currentUser.fullName}"/></span>
+                            <span class="material-symbols-outlined text-[21px]">account_circle</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-xl border border-slate-200 rounded-xl mt-2 py-2" style="min-width: 230px;">
                             <li class="px-3 py-2 border-b border-slate-100">
@@ -254,19 +289,14 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="flex items-center gap-2">
-                        <a href="${pageContext.request.contextPath}/auth/login"
-                           class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:text-white hover:bg-[#1e293b] text-decoration-none transition-colors">
-                            Đăng nhập
-                        </a>
-                        <a href="${pageContext.request.contextPath}/auth/register"
-                           class="px-3.5 py-1.5 rounded-lg bg-primary-container hover:bg-primary text-white text-xs font-semibold text-decoration-none shadow-sm transition-colors">
-                            Đăng ký
-                        </a>
-                    </div>
+                    <a href="${pageContext.request.contextPath}/auth/login"
+                       class="h-10 px-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-white text-sm font-medium flex items-center gap-2 text-decoration-none transition-colors">
+                        <span>Đăng nhập</span>
+                        <span class="material-symbols-outlined text-[21px]">account_circle</span>
+                    </a>
                 </c:otherwise>
             </c:choose>
-        </nav>
+        </div>
     </div>
 </header>
 
