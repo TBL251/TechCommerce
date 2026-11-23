@@ -16,35 +16,33 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
-
-      - name: Run test suite before publishing
         run: |
+          git init .
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git fetch --depth=1 origin "${{ github.sha }}"
+          git checkout -f FETCH_HEAD
+
+      - name: Run test suite before publishing (JDK 17)
+        run: |
+          if [ -n "$JAVA_HOME_17_X64" ]; then
+            export JAVA_HOME="$JAVA_HOME_17_X64"
+            export PATH="$JAVA_HOME/bin:$PATH"
+          fi
           chmod +x mvnw
           ./mvnw -B test
 
       - name: Log in to GitHub Container Registry (GHCR)
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: |
-            ghcr.io/tbl251/techcommerce:latest
-            ghcr.io/tbl251/techcommerce:${{ github.sha }}
+        run: |
+          docker build \
+            -t ghcr.io/tbl251/techcommerce:latest \
+            -t ghcr.io/tbl251/techcommerce:${{ github.sha }} \
+            .
+          docker push ghcr.io/tbl251/techcommerce:latest
+          docker push ghcr.io/tbl251/techcommerce:${{ github.sha }}
 
   deploy:
     name: Deploy to Self-Hosted Server (techcommerce.store)
@@ -55,15 +53,17 @@ jobs:
     continue-on-error: true
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Sync production compose files
+        shell: powershell
+        run: |
+          Copy-Item "e:\TechCommerce\docker-compose.prod.yml" -Destination "$PWD\docker-compose.prod.yml" -Force
+          New-Item -ItemType Directory -Force -Path "$PWD\docker\nginx" | Out-Null
+          Copy-Item "e:\TechCommerce\docker\nginx\default.conf" -Destination "$PWD\docker\nginx\default.conf" -Force
 
       - name: Log in to GitHub Container Registry (GHCR)
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        shell: powershell
+        run: |
+          "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
       - name: Generate .env.prod from GitHub Secrets
         shell: powershell
