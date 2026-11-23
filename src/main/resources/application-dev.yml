@@ -4,6 +4,12 @@ spring:
     username: ${DB_USERNAME:techcommerce}
     password: ${DB_PASSWORD:techcommerce_dev}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+  flyway:
+    url: ${FLYWAY_URL:${DB_URL:jdbc:postgresql://localhost:5432/techcommerce}}
+    user: ${DB_USERNAME:techcommerce}
+    password: ${DB_PASSWORD:techcommerce_dev}
   mail:
     host: ${MAIL_HOST:localhost}
     port: ${MAIL_PORT:1025}
@@ -12,9 +18,9 @@ spring:
     properties:
       mail:
         smtp:
-          auth: false
+          auth: ${MAIL_SMTP_AUTH:true}
           starttls:
-            enable: false
+            enable: ${MAIL_STARTTLS:true}
 
 app:
   seed-demo-data: true
