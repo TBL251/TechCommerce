@@ -22,9 +22,14 @@ public class CurrentUserAdvice {
     }
 
     @ModelAttribute("currentUser")
-    public UserPrincipal currentUser() {
+    public UserPrincipal currentUser(HttpServletRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof UserPrincipal principal) {
+            request.setAttribute("currentUser", principal);
+            return principal;
+        }
+        Object attr = request.getAttribute("currentUser");
+        if (attr instanceof UserPrincipal principal) {
             return principal;
         }
         return null;

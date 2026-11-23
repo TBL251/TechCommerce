@@ -29,11 +29,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilterErrorDispatch() {
+        return false;
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        authenticateRequest(request, response);
         var existingAuth = SecurityContextHolder.getContext().getAuthentication();
-        if (existingAuth == null || !(existingAuth.getPrincipal() instanceof UserPrincipal)) {
-            authenticateRequest(request, response);
+        if (existingAuth != null && existingAuth.getPrincipal() instanceof UserPrincipal principal) {
+            request.setAttribute("currentUser", principal);
         }
         filterChain.doFilter(request, response);
     }
@@ -60,9 +66,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // Fallback to Refresh Token rotation if ACCESS_TOKEN is missing or expired
-        JwtService.readCookie(request, JwtService.REFRESH_COOKIE_NAME)
-                .flatMap(rawRefresh -> jwtService.rotateRefreshToken(rawRefresh, response))
-                .ifPresent(user -> setSecurityContext(user, request));
+        Optional<User> refreshedUser = JwtService.readCookie(request, JwtService.REFRESH_COOKIE_NAME)
+                .flatMap(rawRefresh -> jwtService.rotateRefreshToken(rawRefresh, response));
+        if (refreshedUser.isPresent()) {
+            setSecurityContext(refreshedUser.get(), request);
+            return;
+        }
+
+        // Clear stale UserPrincipal from HttpSession if JWT cookies are absent or invalid
+        var existingAuth = SecurityContextHolder.getContext().getAuthentication();
+        if (existingAuth != null && existingAuth.getPrincipal() instanceof UserPrincipal) {
+            SecurityContextHolder.clearContext();
+        }
     }
 
     private void setSecurityContext(User user, HttpServletRequest request) {

@@ -35,7 +35,7 @@ public class SiteMeshConfig {
         });
         registration.addUrlPatterns("/*");
         registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR));
-        registration.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 20);
         return registration;
     }
 }

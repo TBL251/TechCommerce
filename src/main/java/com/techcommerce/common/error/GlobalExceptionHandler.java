@@ -1,5 +1,8 @@
 package com.techcommerce.common.error;
 
+import com.techcommerce.auth.CurrentUserAdvice;
+import com.techcommerce.auth.UserPrincipal;
+import com.techcommerce.store.Store;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -25,6 +28,12 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    private final CurrentUserAdvice currentUserAdvice;
+
+    public GlobalExceptionHandler(CurrentUserAdvice currentUserAdvice) {
+        this.currentUserAdvice = currentUserAdvice;
+    }
 
     @GetMapping("/error/403")
     public String error403Page(HttpServletResponse response, Model model) {
@@ -83,6 +92,15 @@ public class GlobalExceptionHandler {
         mav.setStatus(status);
         mav.addObject("errorMessage", message);
         mav.addObject("requestUri", uri);
+        UserPrincipal currentUser = currentUserAdvice.currentUser(request);
+        if (currentUser != null) {
+            mav.addObject("currentUser", currentUser);
+        }
+        mav.addObject("activeStores", currentUserAdvice.activeStores());
+        Store currentStore = currentUserAdvice.currentStore(request);
+        if (currentStore != null) {
+            mav.addObject("currentStore", currentStore);
+        }
         return mav;
     }
 }

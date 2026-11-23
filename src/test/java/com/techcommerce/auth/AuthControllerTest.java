@@ -190,5 +190,13 @@ class AuthControllerTest {
                         .param("email", "unauth@techcommerce.store")
                         .param("password", "Pass1234!"))
                 .andExpect(status().isForbidden());
+
+        // Repeated navigation to unimplemented/404 feature routes preserves currentUser in model & request
+        for (String path : new String[]{"/products", "/orders", "/cart"}) {
+            MvcResult notFoundRes = mockMvc.perform(get(path).cookie(staffCookie))
+                    .andExpect(status().isNotFound())
+                    .andReturn();
+            assertThat(notFoundRes.getRequest().getAttribute("currentUser")).isInstanceOf(UserPrincipal.class);
+        }
     }
 }
