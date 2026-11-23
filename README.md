@@ -82,7 +82,7 @@ thanh toán COD & VNPay, theo dõi tiến trình đơn hàng qua WebSocket và �
 
 ### Từ khách vãng lai đến điều hành chuỗi đa chi nhánh
 
-Thiết kế đồng bộ bằng **Google Stitch Design System v3.0**, tách biệt rõ giao diện Khách hàng, الخung xác thực và Trung tâm vận hành.
+Thiết kế đồng bộ bằng **Google Stitch Design System v3.0**, tách biệt rõ giao diện Khách hàng, Khung xác thực và Trung tâm vận hành.
 
 <sub>4 TRỤ CỘT KỸ THUẬT CỦA TECHCOMMERCE</sub>
 
@@ -197,7 +197,7 @@ Toàn bộ thư viện được khóa chặt trong [`pom.xml`](./pom.xml) để 
 | **Design System** | Bootstrap `5.3.3` · Bootstrap Icons `1.11.3` · Google Stitch v3.0 | Hệ thống token màu sắc, bảng biểu `tabular-nums`, font `Be Vietnam Pro` & `JetBrains Mono` |
 | **Cơ sở dữ liệu** | PostgreSQL `17` (Supabase) · Flyway · H2 (Test) | Quản lý phiên bản schema tự động (`V1`, `V2`), kiểm thử tự động trên H2 in-memory |
 | **Xác thực & Phiên** | `jjwt 0.12.6` · Google OAuth2 Client · BCrypt | Xác thực không trạng thái kết hợp xoay vòng Refresh Token trong PostgreSQL |
-| **Hạ tầng & DevOps** | Docker Compose · Nginx · Cloudflare Named Tunnel · GitHub Actions | Tự động chạy 29 test, build image đẩy lên GHCR và cập nhật container qua Self-Hosted Runner |
+| **Hạ tầng & DevOps** | Docker Compose · Nginx · Cloudflare Named Tunnel · GitHub Actions | Tự động chạy 30 test, build image đẩy lên GHCR và cập nhật container qua Self-Hosted Runner |
 
 <div align="right">
 
@@ -220,16 +220,21 @@ Toàn bộ thư viện được khóa chặt trong [`pom.xml`](./pom.xml) để 
 
 | Đường dẫn | Quyền truy cập | Mô tả chức năng |
 | :--- | :--- | :--- |
-| `/` hoặc `/health-jsp` | Công khai | Trang chủ Storefront, danh mục phần cứng và lưới chọn nhanh 3 chi nhánh |
+| `/` hoặc `/health-jsp` | Công khai | Trang chủ Storefront, thanh tìm kiếm trung tâm, danh mục phần cứng và lưới chọn nhanh 3 chi nhánh |
 | `/stores` | Công khai | Danh bạ chi tiết 3 showroom (`HN-01`, `HCM-01`, `DN-01`), giờ mở cửa và hotline |
 | `/stores/select?storeId={id}` | Công khai | Đặt cookie chi nhánh đang chọn (`code=ALL` để quay về Toàn hệ thống) |
-| `/auth/login` | Công khai | Đăng nhập Email/Mật khẩu, Google OAuth2 và hộp **Điền nhanh tài khoản mẫu** |
-| `/auth/register` | Công khai | Bước 1 đăng ký tài khoản khách hàng và gửi mã OTP 6 số qua email |
-| `/auth/register/verify-otp` | Công khai | Bước 2 xác thực mã OTP 6 chữ số để kích hoạt tài khoản |
+| `/auth/login` | Công khai | Đăng nhập Email/Mật khẩu, Google OAuth2 (`prompt=select_account consent`) và hộp **Điền nhanh tài khoản mẫu** |
+| `/auth/register` | Công khai | Bước 1 đăng ký tài khoản khách hàng (`CUSTOMER`) và gửi mã OTP 6 số qua email |
+| `/auth/register/verify-otp` | Công khai | Bước 2 xác thực mã OTP 6 chữ số để kích hoạt tài khoản `CUSTOMER` |
 | `/auth/forgot-password` | Công khai | Yêu cầu gửi liên kết đặt lại mật khẩu dùng 1 lần (hiệu lực 15 phút) |
 | `/profile` | Đã đăng nhập | Cập nhật hồ sơ, đổi mật khẩu/đặt mật khẩu cho tài khoản Google, quản lý sổ địa chỉ (tối đa 5) |
-| `/admin/users` | `ADMIN` | Trung tâm vận hành: thống kê tài khoản, cấp tài khoản `STAFF` theo chi nhánh, khóa/mở khóa người dùng |
+| `/admin/dashboard` | `ADMIN`, `STAFF` | Trung tâm Vận hành Chi nhánh: hiển thị showroom được phân công của nhân viên và điều hướng nghiệp vụ chi nhánh |
+| `/admin/users` | Chỉ `ADMIN` | Quản trị nhân sự toàn chuỗi: thống kê tài khoản, **cấp tài khoản `STAFF` mới gán theo chi nhánh**, khóa/mở khóa tài khoản |
 | `/api/health` | Công khai | Endpoint JSON kiểm tra trạng thái sống của container (`{"status":"UP"}`) |
+
+> [!NOTE]
+>
+> **Quy định cấp tài khoản nhân viên (`STAFF`)**: Trang đăng ký công khai (`/auth/register`) và Google OAuth2 chỉ khởi tạo tài khoản Khách hàng (`CUSTOMER`). Tài khoản Nhân viên chi nhánh (`STAFF`) bắt buộc gắn với một showroom hợp lệ (`chk_users_staff_store`) và **chỉ được tạo trực tiếp bởi `ADMIN`** tại `/admin/users`.
 
 ### 3. Tài khoản mẫu phục vụ chấm điểm & kiểm thử
 
@@ -291,10 +296,10 @@ cp .env.example .env
 # 3. Khởi động PostgreSQL 16 local (cổng 5432) và Mailpit SMTP test (cổng 1025 / giao diện web 8025)
 docker compose up -d
 
-# 4. Chạy bộ kiểm thử tự động (29 tests trên H2 in-memory)
+# 4. Chạy bộ kiểm thử tự động (30 tests trên H2 in-memory, bao gồm kiểm tra đồng bộ .env.example)
 ./mvnw test
 
-# 5. Khởi động ứng dụng ở cổng 8080
+# 5. Khởi động ứng dụng ở cổng 8080 (tự động cảnh báo nếu .env thiếu biến mới và hỗ trợ hot-reload JSP)
 ./mvnw spring-boot:run
 ```
 
@@ -312,7 +317,7 @@ docker compose up -d
 > [!TIP]
 >
 > Trước khi dùng công cụ AI để sinh mã hoặc mở Pull Request mới, hãy đọc kỹ **[CONTRIBUTING.md](./CONTRIBUTING.md)**.
-> Mọi thay đổi bắt buộc vượt qua `./mvnw test` (**29/29 xanh**), dùng gói `jakarta.*` (không dùng `javax.*`), đính kèm CSRF token trong mọi biểu mẫu `POST` và tuyệt đối không sửa nội dung các tệp Flyway migration cũ (`V1`, `V2`).
+> Mọi thay đổi bắt buộc vượt qua `./mvnw test` (**30/30 xanh**), dùng gói `jakarta.*` (không dùng `javax.*`), đính kèm CSRF token trong mọi biểu mẫu `POST` và tuyệt đối không sửa nội dung các tệp Flyway migration cũ (`V1`, `V2`).
 
 ### 1. Bảng phân công 4 thành viên
 
