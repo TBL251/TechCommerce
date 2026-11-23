@@ -18,7 +18,7 @@
     </div>
 </c:if>
 
-<form action="${pageContext.request.contextPath}/auth/register" method="post" class="mb-3">
+<form action="${pageContext.request.contextPath}/auth/register/send-otp" method="post" class="mb-3">
     <c:if test="${not empty _csrf}">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </c:if>
@@ -52,8 +52,8 @@
         </div>
     </div>
     <button type="submit" class="btn btn-primary w-100 py-2">
-        <i class="bi bi-person-check" aria-hidden="true"></i>
-        <span>Tạo tài khoản và đăng nhập</span>
+        <i class="bi bi-envelope-check" aria-hidden="true"></i>
+        <span>Gửi mã xác nhận qua email</span>
     </button>
 </form>
 

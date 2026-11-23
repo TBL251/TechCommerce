@@ -33,6 +33,16 @@ public class EmailService {
         this.fromAddress = fromAddress;
     }
 
+    public void sendRegistrationOtpEmail(String toEmail, String fullName, String otp) {
+        String subject = "[TechCommerce] Mã xác nhận đăng ký tài khoản";
+        String body = "Xin chào " + fullName + ",\n\n"
+                + "Mã OTP xác nhận đăng ký tài khoản TechCommerce của bạn là:\n\n"
+                + "    " + otp + "\n\n"
+                + "Mã có hiệu lực trong 10 phút và chỉ dùng được một lần.\n"
+                + "Nếu bạn không thực hiện đăng ký, vui lòng bỏ qua email này.";
+        recordAndDispatchAsync(toEmail, subject, body);
+    }
+
     public void sendPasswordResetEmail(String toEmail, String resetUrl) {
         String subject = "[TechCommerce] Đặt lại mật khẩu tài khoản của bạn";
         String body = "Xin chào,\n\nBạn (hoặc ai đó) vừa yêu cầu đặt lại mật khẩu tại TechCommerce.\n"

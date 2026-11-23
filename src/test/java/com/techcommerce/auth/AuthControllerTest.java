@@ -42,9 +42,9 @@ class AuthControllerTest {
     }
 
     @Test
-    void registersNewCustomerSetsHttpOnlyCookiesAndEnforcesCsrf() throws Exception {
+    void registrationSendOtpEnforcesCsrfAndRejectsExistingEmail() throws Exception {
         // Without CSRF token -> 403 Forbidden
-        mockMvc.perform(post("/auth/register")
+        mockMvc.perform(post("/auth/register/send-otp")
                         .param("fullName", "Khách Hàng Mới")
                         .param("email", "newcustomer@techcommerce.store")
                         .param("phone", "0901112222")
@@ -52,24 +52,32 @@ class AuthControllerTest {
                         .param("confirmPassword", "Secret123!"))
                 .andExpect(status().isForbidden());
 
-        // With CSRF token -> 302 redirect + HttpOnly cookies + security headers
-        mockMvc.perform(post("/auth/register")
+        // With CSRF -> 200 (renders register-otp view), no JWT cookie yet
+        mockMvc.perform(post("/auth/register/send-otp")
                         .with(csrf())
                         .param("fullName", "Khách Hàng Mới")
                         .param("email", "newcustomer@techcommerce.store")
                         .param("phone", "0901112222")
                         .param("password", "Secret123!")
                         .param("confirmPassword", "Secret123!"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(cookie().exists(JwtService.ACCESS_COOKIE_NAME))
-                .andExpect(cookie().httpOnly(JwtService.ACCESS_COOKIE_NAME, true))
-                .andExpect(cookie().exists(JwtService.REFRESH_COOKIE_NAME))
-                .andExpect(header().string("X-Content-Type-Options", "nosniff"))
-                .andExpect(header().string("X-Frame-Options", "SAMEORIGIN"));
+                .andExpect(status().isOk())
+                .andExpect(result -> assertThat(result.getResponse().getCookie(JwtService.ACCESS_COOKIE_NAME)).isNull());
 
-        User created = userRepository.findByEmailIgnoreCase("newcustomer@techcommerce.store").orElseThrow();
-        assertThat(passwordEncoder.matches("Secret123!", created.getPasswordHash())).isTrue();
+        // Email already registered -> 409
+        User existing = new User();
+        existing.setEmail("taken@techcommerce.store");
+        existing.setFullName("Taken User");
+        existing.setPasswordHash(passwordEncoder.encode("Pass123!"));
+        existing.setRole("CUSTOMER");
+        userRepository.save(existing);
+
+        mockMvc.perform(post("/auth/register/send-otp")
+                        .with(csrf())
+                        .param("fullName", "Người Dùng Mới")
+                        .param("email", "taken@techcommerce.store")
+                        .param("password", "Secret123!")
+                        .param("confirmPassword", "Secret123!"))
+                .andExpect(status().isConflict());
     }
 
     @Test
