@@ -12,19 +12,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/assets/css/main.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/css/main.css?v=2.1" rel="stylesheet">
     <c:if test="${not empty _csrf}">
         <meta name="_csrf" content="${_csrf.token}"/>
         <meta name="_csrf_header" content="${_csrf.headerName}"/>
     </c:if>
     <sitemesh:write property="head"/>
 </head>
-<body>
-<a href="#admin-main-content" class="skip-link">Chuyển tới vùng làm việc chính</a>
+<body class="bg-light">
+<a href="#admin-main-content" class="skip-link visually-hidden-focusable">Chuyển tới vùng làm việc chính</a>
 
 <div class="d-flex min-vh-100">
     <!-- Sidebar quản trị trên màn hình lớn (Desktop) -->
-    <aside class="tc-admin-sidebar text-white p-3 d-none d-lg-flex flex-column">
+    <aside class="tc-admin-sidebar bg-dark text-white p-3 d-none d-lg-flex flex-column">
         <a href="${pageContext.request.contextPath}/admin/users" class="text-white text-decoration-none fw-bold fs-5 mb-3 d-flex align-items-center gap-2" translate="no">
             <span class="tc-brand-mark" aria-hidden="true"><i class="bi bi-cpu"></i></span>
             <div>

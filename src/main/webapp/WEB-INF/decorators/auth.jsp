@@ -12,11 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/assets/css/main.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/css/main.css?v=2.1" rel="stylesheet">
     <sitemesh:write property="head"/>
 </head>
-<body class="tc-auth-shell d-flex flex-column min-vh-100">
-<a href="#auth-main-content" class="skip-link">Chuyển tới biểu mẫu xác thực</a>
+<body class="tc-auth-shell bg-light d-flex flex-column min-vh-100">
+<a href="#auth-main-content" class="skip-link visually-hidden-focusable">Chuyển tới biểu mẫu xác thực</a>
 
 <header class="py-3 border-bottom bg-white">
     <div class="container d-flex justify-content-between align-items-center">

@@ -12,18 +12,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/assets/css/main.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/css/main.css?v=2.1" rel="stylesheet">
     <c:if test="${not empty _csrf}">
         <meta name="_csrf" content="${_csrf.token}"/>
         <meta name="_csrf_header" content="${_csrf.headerName}"/>
     </c:if>
     <sitemesh:write property="head"/>
 </head>
-<body class="d-flex flex-column min-vh-100">
-<a href="#main-content" class="skip-link">Chuyển tới nội dung chính</a>
+<body class="d-flex flex-column min-vh-100 bg-light">
+<a href="#main-content" class="skip-link visually-hidden-focusable">Chuyển tới nội dung chính</a>
 
 <!-- Thanh thông tin chi nhánh & cam kết dịch vụ -->
-<div class="tc-topbar py-1 d-none d-md-block">
+<div class="tc-topbar bg-dark text-light py-1 d-none d-md-block">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-3">
             <span><i class="bi bi-geo-alt-fill text-info me-1" aria-hidden="true"></i>Hệ thống 3 chi nhánh: <strong class="text-white">Hà Nội · TP.HCM · Đà Nẵng</strong></span>
@@ -39,7 +39,7 @@
 </div>
 
 <!-- Thanh điều hướng chính -->
-<header class="navbar navbar-expand-lg navbar-dark tc-header sticky-top shadow-sm py-2">
+<header class="navbar navbar-expand-lg navbar-dark bg-dark tc-header sticky-top shadow-sm py-2">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2 me-3" href="${pageContext.request.contextPath}/" translate="no">
             <span class="tc-brand-mark" aria-hidden="true"><i class="bi bi-cpu"></i></span>
@@ -189,7 +189,7 @@
     </div>
 </main>
 
-<footer class="tc-header text-light py-4 mt-auto">
+<footer class="tc-header bg-dark text-light py-4 mt-auto">
     <div class="container">
         <div class="row g-4 align-items-center">
             <div class="col-md-6">
