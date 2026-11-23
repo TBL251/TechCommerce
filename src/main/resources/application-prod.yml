@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 0
+      maximum-pool-size: 10
+      idle-timeout: 60000
+      max-lifetime: 300000
+      connection-timeout: 20000
+  flyway:
+    url: ${FLYWAY_URL:${DB_URL}}
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  forward-headers-strategy: framework
+
+app:
+  public-url: ${APP_PUBLIC_URL:https://techcommerce.store}
+  cookie-secure: true
