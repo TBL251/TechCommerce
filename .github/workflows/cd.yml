@@ -49,6 +49,7 @@ jobs:
   deploy:
     name: Deploy to Self-Hosted Server (techcommerce.store)
     needs: build-and-push
+    if: vars.ENABLE_SELF_HOSTED_DEPLOY == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: self-hosted
     timeout-minutes: 5
     continue-on-error: true
