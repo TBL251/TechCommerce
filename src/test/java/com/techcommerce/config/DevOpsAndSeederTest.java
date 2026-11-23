@@ -30,7 +30,9 @@ class DevOpsAndSeederTest {
     @Test
     void seedsDefaultStoresAndDemoAccountsIdempotently() {
         userRepository.deleteAll();
+        userRepository.flush();
         storeRepository.deleteAll();
+        storeRepository.flush();
 
         demoDataSeeder.seedIfEmpty();
         assertThat(storeRepository.count()).isEqualTo(3);

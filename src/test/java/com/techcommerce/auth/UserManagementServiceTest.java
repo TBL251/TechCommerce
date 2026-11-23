@@ -51,7 +51,9 @@ class UserManagementServiceTest {
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
+        userRepository.flush();
         storeRepository.deleteAll();
+        storeRepository.flush();
 
         Store st = new Store();
         st.setCode("HN-01");
@@ -59,7 +61,7 @@ class UserManagementServiceTest {
         st.setAddress("100 Cầu Giấy");
         st.setCity("Hà Nội");
         st.setPhone("0241234567");
-        hanoiStore = storeRepository.save(st);
+        hanoiStore = storeRepository.saveAndFlush(st);
     }
 
     @Test
