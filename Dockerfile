@@ -4,7 +4,7 @@ WORKDIR /workspace
 
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
-RUN apk add --no-cache curl unzip && chmod +x mvnw
+RUN apk add --no-cache curl unzip maven && chmod +x mvnw
 
 COPY src/ src/
 RUN ./mvnw -B clean package -DskipTests
