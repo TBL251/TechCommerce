@@ -27,5 +27,8 @@ logs/
 graphify-out/
 .actions-runner/
 .env.prod
+.ua/
 
+# Understand-Anything
+.ua/
 

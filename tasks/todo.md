@@ -544,7 +544,7 @@ Quy ước người phụ trách:
 **Kiểm chứng:**
 - [x] Tests pass: workflow CI xanh trên GitHub Actions với 1 PR thử nghiệm.
 - [x] Build succeeds: bước `docker build` trong CI hoàn tất không cảnh báo lỗi.
-- [ ] Manual check: thử tạo commit cố tình làm fail 1 test, xác nhận CI báo đỏ và chặn merge.
+- [x] Manual check: thử tạo commit cố tình làm fail 1 test, xác nhận CI báo đỏ và chặn merge.
 
 **Phụ thuộc:** Task 1 (nên dựng sớm ngay sau Checkpoint Giai đoạn 1)
 
@@ -568,7 +568,7 @@ Quy ước người phụ trách:
 **Kiểm chứng:**
 - [x] Tests pass: kiểm tra container healthcheck `healthy` và endpoint `/health-jsp` trả 200 qua `https://techcommerce.store`.
 - [x] Build succeeds: `docker build -t techcommerce:local .` và `docker compose -p techcommerce-prod -f docker-compose.prod.yml up -d`.
-- [ ] Manual check: bật Self-hosted Runner trên máy TV1, đẩy 1 thay đổi nhỏ lên `main`, xác nhận `cd.yml` chạy xanh và thay đổi hiển thị trên `https://techcommerce.store`; thử tắt máy TV1 và bật container trên máy TV2 xác nhận tên miền sống lại với nguyên vẹn dữ liệu Neon.
+- [x] Manual check: bật Self-hosted Runner trên máy TV1, đẩy 1 thay đổi nhỏ lên `main`, xác nhận `cd.yml` chạy xanh và thay đổi hiển thị trên `https://techcommerce.store`; thử tắt máy TV1 và bật container trên máy TV2 xác nhận tên miền sống lại với nguyên vẹn dữ liệu Neon.
 
 **Phụ thuộc:** Task 15, Task 19
 
