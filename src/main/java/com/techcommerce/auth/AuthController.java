@@ -177,11 +177,20 @@ public class AuthController {
         JwtService.readCookie(request, JwtService.REFRESH_COOKIE_NAME)
                 .ifPresent(jwtService::revokeRefreshToken);
         jwtService.clearAuthCookies(response);
+        var session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         SecurityContextHolder.clearContext();
         return "redirect:/auth/login?logout=true";
     }
 
     private void issueTokensAndMergeCart(User user, HttpServletRequest request, HttpServletResponse response) {
+        var session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        SecurityContextHolder.clearContext();
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.issueRefreshToken(user.getId());
         jwtService.addAuthCookies(response, accessToken, refreshToken);

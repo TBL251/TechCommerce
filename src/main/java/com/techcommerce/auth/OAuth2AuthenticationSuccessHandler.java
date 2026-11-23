@@ -88,6 +88,11 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         String refreshToken = jwtService.issueRefreshToken(user.getId());
         jwtService.addAuthCookies(response, accessToken, refreshToken);
 
+        var session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
         Long selectedStoreId = JwtService.readCookie(request, "SELECTED_STORE_ID")
                 .map(val -> {
                     try { return Long.valueOf(val); } catch (NumberFormatException e) { return null; }
@@ -96,8 +101,8 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         Long finalUserId = user.getId();
         guestCartMerger.ifPresent(merger -> merger.mergeGuestCart(finalUserId, selectedStoreId, request, response));
 
-        String targetUrl = ("ADMIN".equals(user.getRole()) || "STAFF".equals(user.getRole()))
-                ? request.getContextPath() + "/admin/dashboard"
+        String targetUrl = "ADMIN".equals(user.getRole())
+                ? request.getContextPath() + "/admin/users"
                 : (StringUtils.hasText(request.getContextPath()) ? request.getContextPath() + "/" : "/");
         response.sendRedirect(targetUrl);
     }
