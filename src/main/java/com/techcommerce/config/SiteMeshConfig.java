@@ -20,6 +20,7 @@ public class SiteMeshConfig {
             @Override
             protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
                 builder
+                        .setDecoratorPrefix("")
                         .addDecoratorPath("/*", "/WEB-INF/decorators/web.jsp")
                         .addDecoratorPath("/admin/*", "/WEB-INF/decorators/admin.jsp")
                         .addDecoratorPath("/staff/*", "/WEB-INF/decorators/admin.jsp")
