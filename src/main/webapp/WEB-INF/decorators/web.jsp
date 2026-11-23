@@ -45,9 +45,16 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark shadow border-secondary mt-1">
                     <li class="dropdown-header small text-secondary">Chọn điểm xem tồn kho &amp; nhận hàng</li>
+                    <li>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center gap-3 ${empty currentStore ? 'active' : ''}"
+                           href="${pageContext.request.contextPath}/stores/select?code=ALL">
+                            <span>Toàn hệ thống</span>
+                            <span class="badge bg-secondary tc-mono">ALL</span>
+                        </a>
+                    </li>
                     <c:forEach var="storeItem" items="${activeStores}">
                         <li>
-                            <a class="dropdown-item d-flex justify-content-between align-items-center gap-3"
+                            <a class="dropdown-item d-flex justify-content-between align-items-center gap-3 ${not empty currentStore and currentStore.id == storeItem.id ? 'active' : ''}"
                                href="${pageContext.request.contextPath}/stores/select?storeId=${storeItem.id}">
                                 <span><c:out value="${storeItem.name}"/></span>
                                 <span class="badge bg-secondary tc-mono"><c:out value="${storeItem.code}"/></span>
@@ -55,9 +62,9 @@
                         </li>
                     </c:forEach>
                     <c:if test="${empty activeStores}">
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/?branch=HN-01">TechCommerce Hà Nội <span class="tc-mono text-info ms-1">HN-01</span></a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/?branch=HCM-01">TechCommerce TP.HCM <span class="tc-mono text-info ms-1">HCM-01</span></a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/?branch=DN-01">TechCommerce Đà Nẵng <span class="tc-mono text-info ms-1">DN-01</span></a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/stores/select?code=HN-01">TechCommerce Hà Nội <span class="tc-mono text-info ms-1">HN-01</span></a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/stores/select?code=HCM-01">TechCommerce TP.HCM <span class="tc-mono text-info ms-1">HCM-01</span></a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/stores/select?code=DN-01">TechCommerce Đà Nẵng <span class="tc-mono text-info ms-1">DN-01</span></a></li>
                     </c:if>
                     <li><hr class="dropdown-divider border-secondary"></li>
                     <li>

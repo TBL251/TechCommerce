@@ -24,25 +24,43 @@ public class StoreController {
         this.storeRepository = storeRepository;
     }
 
-    /** Chọn chi nhánh — đặt cookie rồi redirect về trang trước. */
+    /** Chọn chi nhánh — đặt cookie rồi redirect về trang trước (bỏ query ?branch= cũ nếu có). */
     @GetMapping("/select")
-    public String select(@RequestParam Long storeId,
+    public String select(@RequestParam(required = false) Long storeId,
+                         @RequestParam(required = false) String code,
                          HttpServletRequest request,
                          HttpServletResponse response) {
-        // Chỉ cho phép storeId hợp lệ và đang hoạt động
-        storeRepository.findById(storeId)
-                .filter(Store::isActive)
-                .ifPresent(store -> {
-                    Cookie cookie = new Cookie(COOKIE_NAME, String.valueOf(store.getId()));
-                    cookie.setPath("/");
-                    cookie.setMaxAge(COOKIE_MAX_AGE);
-                    cookie.setHttpOnly(false); // JS không cần đọc, nhưng để tương thích frontend
-                    cookie.setAttribute("SameSite", "Lax");
-                    response.addCookie(cookie);
-                });
+        if (storeId == null && (code == null || code.isBlank() || "ALL".equalsIgnoreCase(code))) {
+            Cookie cookie = new Cookie(COOKIE_NAME, "");
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            cookie.setAttribute("SameSite", "Lax");
+            response.addCookie(cookie);
+        } else {
+            var storeOpt = (storeId != null)
+                    ? storeRepository.findById(storeId)
+                    : storeRepository.findByCode(code.trim());
+            storeOpt.filter(Store::isActive).ifPresent(store -> {
+                Cookie cookie = new Cookie(COOKIE_NAME, String.valueOf(store.getId()));
+                cookie.setPath("/");
+                cookie.setMaxAge(COOKIE_MAX_AGE);
+                cookie.setHttpOnly(false);
+                cookie.setAttribute("SameSite", "Lax");
+                response.addCookie(cookie);
+            });
+        }
 
         String referer = request.getHeader("Referer");
-        return "redirect:" + (referer != null ? referer : "/");
+        if (referer != null && !referer.isBlank()) {
+            try {
+                java.net.URI uri = java.net.URI.create(referer);
+                String path = (uri.getPath() != null && !uri.getPath().isBlank()) ? uri.getPath() : "/";
+                return "redirect:" + path;
+            } catch (IllegalArgumentException ignored) {
+                // fallback về trang chủ
+            }
+        }
+        return "redirect:/";
     }
 
     /** Trang danh sách tất cả chi nhánh. */
