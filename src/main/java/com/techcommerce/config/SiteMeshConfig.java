@@ -21,6 +21,7 @@ public class SiteMeshConfig {
             protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
                 builder
                         .setDecoratorPrefix("")
+                        .setIncludeErrorPages(true)
                         .addDecoratorPath("/*", "/WEB-INF/decorators/web.jsp")
                         .addDecoratorPath("/admin/*", "/WEB-INF/decorators/admin.jsp")
                         .addDecoratorPath("/staff/*", "/WEB-INF/decorators/admin.jsp")
