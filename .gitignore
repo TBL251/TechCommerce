@@ -25,5 +25,7 @@ Thumbs.db
 logs/
 .m2/
 graphify-out/
+.actions-runner/
+.env.prod
 
 
