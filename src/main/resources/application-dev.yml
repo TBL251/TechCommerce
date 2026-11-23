@@ -25,3 +25,11 @@ spring:
 app:
   seed-demo-data: true
 
+server:
+  servlet:
+    jsp:
+      init-parameters:
+        development: true
+        checkInterval: 1
+
+
