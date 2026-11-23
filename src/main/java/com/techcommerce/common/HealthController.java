@@ -11,7 +11,7 @@ import java.util.Map;
 @Controller
 public class HealthController {
 
-    @GetMapping("/health-jsp")
+    @GetMapping({"/", "/health-jsp"})
     public String healthJsp(Model model) {
         model.addAttribute("appName", "TechCommerce");
         return "health";
