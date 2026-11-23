@@ -150,13 +150,13 @@
                 </a>
             </div>
 
-            <c:if test="${empty currentUser || currentUser.role == 'ADMIN'}">
-                <div class="space-y-1">
-                    <div class="px-3 py-1 text-[11px] font-label font-semibold text-slate-400 uppercase tracking-wider">Quản trị toàn chuỗi</div>
-                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg bg-primary-container text-white font-semibold shadow-sm text-decoration-none transition-colors"
-                       href="${pageContext.request.contextPath}/admin/users">
-                        <span class="material-symbols-outlined text-[19px]">group</span>Nhân sự &amp; Người dùng
-                    </a>
+            <div class="space-y-1">
+                <div class="px-3 py-1 text-[11px] font-label font-semibold text-slate-400 uppercase tracking-wider">Quản trị toàn chuỗi</div>
+                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg bg-primary-container text-white font-semibold shadow-sm text-decoration-none transition-colors"
+                   href="${pageContext.request.contextPath}/admin/users">
+                    <span class="material-symbols-outlined text-[19px]">group</span>Nhân sự &amp; Người dùng
+                </a>
+                <c:if test="${empty currentUser || currentUser.role == 'ADMIN'}">
                     <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
                        href="${pageContext.request.contextPath}/admin/stores">
                         <span class="material-symbols-outlined text-[19px]">hub</span>Hệ thống chi nhánh
@@ -169,8 +169,8 @@
                        href="${pageContext.request.contextPath}/admin/vouchers">
                         <span class="material-symbols-outlined text-[19px]">confirmation_number</span>Mã giảm giá
                     </a>
-                </div>
-            </c:if>
+                </c:if>
+            </div>
         </nav>
     </div>
 

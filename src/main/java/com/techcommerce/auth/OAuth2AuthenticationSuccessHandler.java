@@ -101,7 +101,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         Long finalUserId = user.getId();
         guestCartMerger.ifPresent(merger -> merger.mergeGuestCart(finalUserId, selectedStoreId, request, response));
 
-        String targetUrl = "ADMIN".equals(user.getRole())
+        String targetUrl = ("ADMIN".equals(user.getRole()) || "STAFF".equals(user.getRole()))
                 ? request.getContextPath() + "/admin/users"
                 : (StringUtils.hasText(request.getContextPath()) ? request.getContextPath() + "/" : "/");
         response.sendRedirect(targetUrl);

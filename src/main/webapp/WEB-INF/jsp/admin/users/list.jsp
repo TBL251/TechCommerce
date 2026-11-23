@@ -30,54 +30,71 @@
         </div>
     </c:if>
 
-    <!-- Stitch Quick Creation Horizontal Card -->
-    <section class="p-6 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-high space-y-4">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary-container text-[22px]">person_add</span>
-            <h2 class="text-base font-headline font-bold text-on-surface mb-0">Cấp tài khoản Nhân viên chi nhánh mới (STAFF)</h2>
-        </div>
+    <!-- Stitch Quick Creation Horizontal Card (ADMIN only) -->
+    <c:choose>
+        <c:when test="${empty currentUser || currentUser.role == 'ADMIN'}">
+            <section class="p-6 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-high space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-container text-[22px]">person_add</span>
+                    <h2 class="text-base font-headline font-bold text-on-surface mb-0">Cấp tài khoản Nhân viên chi nhánh mới (STAFF)</h2>
+                </div>
 
-        <form action="${pageContext.request.contextPath}/admin/users/staff" method="post" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-end">
-            <c:if test="${not empty _csrf}">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            </c:if>
-            <div class="lg:col-span-3">
-                <label class="block text-xs font-semibold text-on-surface mb-1.5" for="staffFullName">Họ và tên nhân viên</label>
-                <input id="staffFullName" name="fullName" type="text" required autocomplete="off"
-                       placeholder="Lê Hoàng Nam"
-                       class="w-full h-10 px-3.5 text-xs rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#0f52ba] transition-all border-0"/>
-            </div>
-            <div class="lg:col-span-3">
-                <label class="block text-xs font-semibold text-on-surface mb-1.5" for="staffEmail">Email công vụ</label>
-                <input id="staffEmail" name="email" type="email" required autocomplete="off" inputmode="email" spellcheck="false"
-                       placeholder="staff.dn@techcommerce.store"
-                       class="w-full h-10 px-3.5 text-xs font-mono rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#0f52ba] transition-all border-0"/>
-            </div>
-            <div class="lg:col-span-2">
-                <label class="block text-xs font-semibold text-on-surface mb-1.5" for="staffPassword">Mật khẩu khởi tạo</label>
-                <input id="staffPassword" name="password" type="password" minlength="8" required autocomplete="new-password"
-                       placeholder="Tối thiểu 8 ký tự"
-                       class="w-full h-10 px-3.5 text-xs rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#0f52ba] transition-all border-0"/>
-            </div>
-            <div class="lg:col-span-2">
-                <label class="block text-xs font-semibold text-on-surface mb-1.5" for="staffStoreId">Chi nhánh làm việc</label>
-                <select id="staffStoreId" name="storeId" required
-                        class="w-full h-10 px-3 text-xs rounded-lg bg-surface-container-low text-on-surface focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#0f52ba] transition-all border-0">
-                    <option value="">Chọn chi nhánh…</option>
-                    <c:forEach var="st" items="${stores}">
-                        <option value="${st.id}"><c:out value="${st.code}"/> · <c:out value="${st.name}"/></option>
-                    </c:forEach>
-                </select>
-            </div>
-            <div class="lg:col-span-2">
-                <button type="submit"
-                        class="w-full h-10 px-4 rounded-lg bg-primary-container hover:bg-primary text-on-primary text-xs font-semibold shadow-sm flex items-center justify-center gap-1.5 transition-all border-0">
-                    <span class="material-symbols-outlined text-[18px]">person_add</span>
-                    <span>Tạo STAFF</span>
-                </button>
-            </div>
-        </form>
-    </section>
+                <form action="${pageContext.request.contextPath}/admin/users/staff" method="post" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-end">
+                    <c:if test="${not empty _csrf}">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    </c:if>
+                    <div class="lg:col-span-3">
+                        <label class="block text-xs font-semibold text-on-surface mb-1.5" for="staffFullName">Họ và tên nhân viên</label>
+                        <input id="staffFullName" name="fullName" type="text" required autocomplete="off"
+                               placeholder="Lê Hoàng Nam"
+                               class="w-full h-10 px-3.5 text-xs rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#0f52ba] transition-all border-0"/>
+                    </div>
+                    <div class="lg:col-span-3">
+                        <label class="block text-xs font-semibold text-on-surface mb-1.5" for="staffEmail">Email công vụ</label>
+                        <input id="staffEmail" name="email" type="email" required autocomplete="off" inputmode="email" spellcheck="false"
+                               placeholder="staff.dn@techcommerce.store"
+                               class="w-full h-10 px-3.5 text-xs font-mono rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#0f52ba] transition-all border-0"/>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <label class="block text-xs font-semibold text-on-surface mb-1.5" for="staffPassword">Mật khẩu khởi tạo</label>
+                        <input id="staffPassword" name="password" type="password" minlength="8" required autocomplete="new-password"
+                               placeholder="Tối thiểu 8 ký tự"
+                               class="w-full h-10 px-3.5 text-xs rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#0f52ba] transition-all border-0"/>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <label class="block text-xs font-semibold text-on-surface mb-1.5" for="staffStoreId">Chi nhánh làm việc</label>
+                        <select id="staffStoreId" name="storeId" required
+                                class="w-full h-10 px-3 text-xs rounded-lg bg-surface-container-low text-on-surface focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#0f52ba] transition-all border-0">
+                            <option value="">Chọn chi nhánh…</option>
+                            <c:forEach var="st" items="${stores}">
+                                <option value="${st.id}"><c:out value="${st.code}"/> · <c:out value="${st.name}"/></option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <button type="submit"
+                                class="w-full h-10 px-4 rounded-lg bg-primary-container hover:bg-primary text-on-primary text-xs font-semibold shadow-sm flex items-center justify-center gap-1.5 transition-all border-0">
+                            <span class="material-symbols-outlined text-[18px]">person_add</span>
+                            <span>Tạo STAFF</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </c:when>
+        <c:otherwise>
+            <section class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-high flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-[20px]">badge</span>
+                    </div>
+                    <div>
+                        <div class="text-xs font-headline font-bold text-on-surface">Chế độ Nhân viên vận hành chi nhánh (STAFF)</div>
+                        <div class="text-[11px] text-on-surface-variant">Bạn có quyền tra cứu danh sách nhân sự và khách hàng. Thao tác tạo mới hoặc khóa tài khoản chỉ dành cho Quản trị viên (ADMIN).</div>
+                    </div>
+                </div>
+            </section>
+        </c:otherwise>
+    </c:choose>
 
     <!-- Stitch Data Table Container -->
     <section class="rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-high overflow-hidden flex flex-col">
@@ -155,16 +172,23 @@
                             </c:choose>
                         </td>
                         <td class="py-3.5 px-4 pr-6 text-right">
-                            <form action="${pageContext.request.contextPath}/admin/users/${u.id}/toggle-status" method="post" class="inline"
-                                  onsubmit="return ${u.enabled ? 'confirm(\'Khóa tài khoản này?\')' : 'true'};">
-                                <c:if test="${not empty _csrf}">
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                </c:if>
-                                <button type="submit"
-                                        class="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-colors border-0 ${u.enabled ? 'bg-surface-container hover:bg-error-container hover:text-on-error-container text-on-surface-variant' : 'bg-tertiary-fixed hover:bg-tertiary-container text-on-tertiary-fixed hover:text-white'}">
-                                    <c:out value="${u.enabled ? 'Khóa tài khoản' : 'Mở khóa'}"/>
-                                </button>
-                            </form>
+                            <c:choose>
+                                <c:when test="${empty currentUser || currentUser.role == 'ADMIN'}">
+                                    <form action="${pageContext.request.contextPath}/admin/users/${u.id}/toggle-status" method="post" class="inline"
+                                          onsubmit="return ${u.enabled ? 'confirm(\'Khóa tài khoản này?\')' : 'true'};">
+                                        <c:if test="${not empty _csrf}">
+                                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        </c:if>
+                                        <button type="submit"
+                                                class="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-colors border-0 ${u.enabled ? 'bg-surface-container hover:bg-error-container hover:text-on-error-container text-on-surface-variant' : 'bg-tertiary-fixed hover:bg-tertiary-container text-on-tertiary-fixed hover:text-white'}">
+                                            <c:out value="${u.enabled ? 'Khóa tài khoản' : 'Mở khóa'}"/>
+                                        </button>
+                                    </form>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="text-[11px] font-mono text-on-surface-variant">Chỉ xem</span>
+                                </c:otherwise>
+                            </c:choose>
                         </td>
                     </tr>
                 </c:forEach>

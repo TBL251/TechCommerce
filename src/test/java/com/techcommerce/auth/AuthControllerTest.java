@@ -1,5 +1,7 @@
 package com.techcommerce.auth;
 
+import com.techcommerce.store.Store;
+import com.techcommerce.store.StoreRepository;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,9 @@ class AuthControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StoreRepository storeRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -144,6 +149,46 @@ class AuthControllerTest {
         assertThat(accessCookie).isNotNull();
 
         mockMvc.perform(get("/admin/users").cookie(accessCookie))
+                .andExpect(status().isForbidden());
+
+        // STAFF can enter the Admin Center (GET /admin/users, /admin/dashboard) but cannot mutate users (POST /admin/users/staff)
+        Store store = storeRepository.findByCode("HN-01").orElseGet(() -> {
+            Store st = new Store();
+            st.setCode("HN-01");
+            st.setName("TechCommerce Hà Nội");
+            st.setAddress("120 Thái Hà");
+            st.setCity("Hà Nội");
+            st.setPhone("02473008899");
+            return storeRepository.saveAndFlush(st);
+        });
+        User staff = new User();
+        staff.setEmail("staff@techcommerce.store");
+        staff.setFullName("Staff Member");
+        staff.setPasswordHash(passwordEncoder.encode("StaffPass123"));
+        staff.setRole("STAFF");
+        staff.setStoreId(store.getId());
+        userRepository.save(staff);
+
+        MvcResult staffLogin = mockMvc.perform(post("/auth/login")
+                        .with(csrf())
+                        .param("email", "staff@techcommerce.store")
+                        .param("password", "StaffPass123"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/users"))
+                .andReturn();
+
+        Cookie staffCookie = staffLogin.getResponse().getCookie(JwtService.ACCESS_COOKIE_NAME);
+        assertThat(staffCookie).isNotNull();
+
+        mockMvc.perform(get("/admin/users").cookie(staffCookie))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/admin/users/staff")
+                        .with(csrf())
+                        .cookie(staffCookie)
+                        .param("fullName", "Unauthorized Staff")
+                        .param("email", "unauth@techcommerce.store")
+                        .param("password", "Pass1234!"))
                 .andExpect(status().isForbidden());
     }
 }

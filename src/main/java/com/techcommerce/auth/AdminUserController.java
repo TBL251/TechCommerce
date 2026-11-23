@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/admin/users")
 public class AdminUserController {
 
     private final UserService userService;
@@ -22,14 +21,14 @@ public class AdminUserController {
         this.storeRepository = storeRepository;
     }
 
-    @GetMapping
+    @GetMapping({"/admin", "/admin/dashboard", "/admin/users"})
     public String listUsers(Model model) {
         model.addAttribute("users", userService.listAllUsers());
         model.addAttribute("stores", storeRepository.findByActiveTrueOrderByIdAsc());
         return "admin/users/list";
     }
 
-    @PostMapping("/staff")
+    @PostMapping("/admin/users/staff")
     public String createStaff(
             @RequestParam String fullName,
             @RequestParam String email,
@@ -47,7 +46,7 @@ public class AdminUserController {
         return "redirect:/admin/users";
     }
 
-    @PostMapping("/{id}/toggle-status")
+    @PostMapping("/admin/users/{id}/toggle-status")
     public String toggleStatus(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             User updated = userService.toggleUserEnabled(id);
