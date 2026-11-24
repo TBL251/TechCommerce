@@ -1,5 +1,6 @@
 package com.techcommerce.auth;
 
+import com.techcommerce.common.mail.EmailService;
 import com.techcommerce.store.Store;
 import com.techcommerce.store.StoreRepository;
 import jakarta.servlet.http.Cookie;
@@ -39,11 +40,24 @@ class AuthControllerTest {
     private StoreRepository storeRepository;
 
     @Autowired
+    private EmailVerificationOtpRepository otpRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
+        otpRepository.deleteAll();
     }
 
     @Test
@@ -201,5 +215,111 @@ class AuthControllerTest {
                     .andReturn();
             assertThat(notFoundRes.getRequest().getAttribute("currentUser")).isInstanceOf(UserPrincipal.class);
         }
+    }
+
+    @Test
+    void verifyOtpEndpointsHandleValidationInvalidExpiredMaxAttemptsAndSuccess() throws Exception {
+        mockMvc.perform(get("/auth/login").param("error", "1").param("logout", "1"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/auth/register"))
+                .andExpect(status().isOk());
+
+        // Blank fields -> 400
+        mockMvc.perform(post("/auth/register/send-otp")
+                        .with(csrf())
+                        .param("fullName", " ")
+                        .param("email", "")
+                        .param("password", "Secret123!")
+                        .param("confirmPassword", "Secret123!"))
+                .andExpect(status().isBadRequest());
+
+        // Password mismatch / too short -> 400
+        mockMvc.perform(post("/auth/register/send-otp")
+                        .with(csrf())
+                        .param("fullName", "User")
+                        .param("email", "u@techcommerce.store")
+                        .param("password", "short")
+                        .param("confirmPassword", "short"))
+                .andExpect(status().isBadRequest());
+
+        // Send valid OTP
+        emailService.clearRecordedEmails();
+        mockMvc.perform(post("/auth/register/send-otp")
+                        .with(csrf())
+                        .param("fullName", "Verified Buyer")
+                        .param("email", "verifyme@techcommerce.store")
+                        .param("phone", "0908889999")
+                        .param("password", "Secret123!")
+                        .param("confirmPassword", "Secret123!"))
+                .andExpect(status().isOk());
+
+        String validCode = emailService.getRecordedEmails().get(0).body();
+
+        // Wrong OTP -> 401
+        mockMvc.perform(post("/auth/register/verify-otp")
+                        .with(csrf())
+                        .param("email", "verifyme@techcommerce.store")
+                        .param("otp", "000000"))
+                .andExpect(status().isUnauthorized());
+
+        // Correct OTP -> 302 redirect to / and sets ACCESS_TOKEN + REFRESH_TOKEN cookies
+        MvcResult okRes = mockMvc.perform(post("/auth/register/verify-otp")
+                        .with(csrf())
+                        .param("email", "verifyme@techcommerce.store")
+                        .param("otp", validCode))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
+                .andReturn();
+        assertThat(okRes.getResponse().getCookie(JwtService.ACCESS_COOKIE_NAME)).isNotNull();
+        assertThat(okRes.getResponse().getCookie(JwtService.REFRESH_COOKIE_NAME)).isNotNull();
+
+        // Expired OTP -> 410 Gone
+        emailService.clearRecordedEmails();
+        mockMvc.perform(post("/auth/register/send-otp")
+                        .with(csrf())
+                        .param("fullName", "Expired Buyer")
+                        .param("email", "exp@techcommerce.store")
+                        .param("password", "Secret123!")
+                        .param("confirmPassword", "Secret123!"))
+                .andExpect(status().isOk());
+        String expCode = emailService.getRecordedEmails().get(0).body();
+        EmailVerificationOtp expOtp = otpRepository
+                .findFirstByEmailAndVerifiedAtIsNullOrderByCreatedAtDesc("exp@techcommerce.store")
+                .orElseThrow();
+        expOtp.setExpiresAt(java.time.Instant.now().minusSeconds(60));
+        otpRepository.saveAndFlush(expOtp);
+
+        mockMvc.perform(post("/auth/register/verify-otp")
+                        .with(csrf())
+                        .param("email", "exp@techcommerce.store")
+                        .param("otp", expCode))
+                .andExpect(status().isGone());
+    }
+
+    @Test
+    void logoutRevokesRefreshTokenInDatabaseClearsCookiesAndRedirects() throws Exception {
+        User u = new User();
+        u.setEmail("logoutuser@techcommerce.store");
+        u.setFullName("Logout User");
+        u.setPasswordHash(passwordEncoder.encode("Secret123!"));
+        u.setRole("CUSTOMER");
+        u = userRepository.saveAndFlush(u);
+
+        String access = jwtService.generateAccessToken(u);
+        String refresh = jwtService.issueRefreshToken(u.getId());
+
+        mockMvc.perform(post("/auth/logout")
+                        .with(csrf())
+                        .cookie(
+                                new Cookie(JwtService.ACCESS_COOKIE_NAME, access),
+                                new Cookie(JwtService.REFRESH_COOKIE_NAME, refresh)
+                        ))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/auth/login?logout=true"))
+                .andExpect(cookie().maxAge(JwtService.ACCESS_COOKIE_NAME, 0))
+                .andExpect(cookie().maxAge(JwtService.REFRESH_COOKIE_NAME, 0));
+
+        RefreshToken stored = refreshTokenRepository.findByTokenHash(JwtService.sha256Hex(refresh)).orElseThrow();
+        assertThat(stored.getRevokedAt()).isNotNull();
     }
 }

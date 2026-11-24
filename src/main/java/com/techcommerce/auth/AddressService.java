@@ -10,6 +10,8 @@ import java.util.Optional;
 @Service
 public class AddressService {
 
+    public static final int MAX_ADDRESSES_PER_USER = 5;
+
     private final UserAddressRepository addressRepository;
 
     public AddressService(UserAddressRepository addressRepository) {
@@ -30,6 +32,9 @@ public class AddressService {
         }
 
         List<UserAddress> current = addressRepository.findByUserIdOrderByDefaultAddressDescIdDesc(userId);
+        if (current.size() >= MAX_ADDRESSES_PER_USER) {
+            throw new IllegalArgumentException("Sổ địa chỉ chỉ lưu tối đa " + MAX_ADDRESSES_PER_USER + " địa chỉ nhận hàng.");
+        }
         boolean shouldBeDefault = makeDefault || current.isEmpty();
         if (shouldBeDefault) {
             addressRepository.clearDefaultForUser(userId);

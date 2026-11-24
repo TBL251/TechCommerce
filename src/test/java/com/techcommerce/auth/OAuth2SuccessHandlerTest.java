@@ -78,7 +78,7 @@ class OAuth2SuccessHandlerTest {
 
         successHandler.handleGoogleSuccess("unverified@techcommerce.store", false, "Unverified", "sub-1", null, req1, res1);
         assertThat(res1.getCookie(JwtService.ACCESS_COOKIE_NAME)).isNull();
-        assertThat(res1.getRedirectedUrl()).contains("error=");
+        assertThat(res1.getRedirectedUrl()).isEqualTo("/auth/login?error=unverified_email");
 
         User disabled = new User();
         disabled.setEmail("banned@techcommerce.store");
@@ -90,6 +90,41 @@ class OAuth2SuccessHandlerTest {
         MockHttpServletResponse res2 = new MockHttpServletResponse();
         successHandler.handleGoogleSuccess("banned@techcommerce.store", true, "Banned User", "sub-2", null, req2, res2);
         assertThat(res2.getCookie(JwtService.ACCESS_COOKIE_NAME)).isNull();
-        assertThat(res2.getRedirectedUrl()).contains("error=");
+        assertThat(res2.getRedirectedUrl()).isEqualTo("/auth/login?error=account_disabled");
+    }
+
+    @Test
+    void onAuthenticationSuccessExtractsOAuth2UserLinksExistingLocalAccountAndRedirectsByRole() throws Exception {
+        User existingAdmin = new User();
+        existingAdmin.setEmail("admin.oauth@techcommerce.store");
+        existingAdmin.setFullName("Admin OAuth");
+        existingAdmin.setRole("ADMIN");
+        existingAdmin.setAuthProvider("LOCAL");
+        existingAdmin.setEnabled(true);
+        userRepository.saveAndFlush(existingAdmin);
+
+        org.springframework.security.oauth2.core.user.OAuth2User oauth2User =
+                new org.springframework.security.oauth2.core.user.DefaultOAuth2User(
+                        java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_USER")),
+                        java.util.Map.of(
+                                "email", "admin.oauth@techcommerce.store",
+                                "email_verified", true,
+                                "name", "Admin OAuth",
+                                "sub", "google-admin-sub",
+                                "picture", "https://lh3.googleusercontent.com/a/admin"
+                        ),
+                        "email"
+                );
+        org.springframework.security.core.Authentication auth =
+                new org.springframework.security.authentication.TestingAuthenticationToken(oauth2User, null);
+
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        MockHttpServletResponse res = new MockHttpServletResponse();
+        successHandler.onAuthenticationSuccess(req, res, auth);
+
+        assertThat(res.getRedirectedUrl()).isEqualTo("/admin/users");
+        User linked = userRepository.findByEmailIgnoreCase("admin.oauth@techcommerce.store").orElseThrow();
+        assertThat(linked.getProviderId()).isEqualTo("google-admin-sub");
+        assertThat(linked.getAvatarUrl()).isEqualTo("https://lh3.googleusercontent.com/a/admin");
     }
 }

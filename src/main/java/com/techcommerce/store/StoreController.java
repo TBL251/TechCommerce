@@ -54,7 +54,10 @@ public class StoreController {
         if (referer != null && !referer.isBlank()) {
             try {
                 java.net.URI uri = java.net.URI.create(referer);
-                String path = (uri.getPath() != null && !uri.getPath().isBlank()) ? uri.getPath() : "/";
+                String path = uri.getPath();
+                if (path == null || path.isBlank() || !path.startsWith("/") || path.startsWith("//")) {
+                    path = "/";
+                }
                 return "redirect:" + path;
             } catch (IllegalArgumentException ignored) {
                 // fallback về trang chủ

@@ -45,7 +45,7 @@ public class CurrentUserAdvice {
         String storeId = readCookie(request, "SELECTED_STORE_ID");
         if (storeId == null) return null;
         try {
-            return storeRepository.findById(Long.parseLong(storeId)).orElse(null);
+            return storeRepository.findById(Long.parseLong(storeId)).filter(Store::isActive).orElse(null);
         } catch (NumberFormatException e) {
             return null;
         }

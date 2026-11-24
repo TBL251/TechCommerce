@@ -79,13 +79,12 @@ class RegistrationServiceTest {
     @Test
     void verifyWrongOtpIncrementsAttemptsAndRejectsAfterMax() {
         registrationService.sendOtp("locker@techcommerce.store", "Locker", null, "LockPass1!");
-        EmailVerificationOtp otp = otpRepository
-                .findFirstByEmailAndVerifiedAtIsNullOrderByCreatedAtDesc("locker@techcommerce.store")
-                .orElseThrow();
 
         // 5 lần sai
         for (int i = 0; i < RegistrationService.MAX_OTP_ATTEMPTS; i++) {
-            registrationService.verifyOtpAndCreate("locker@techcommerce.store", "000000");
+            RegistrationService.VerifyOtpAndCreateResult attempt =
+                    registrationService.verifyOtpAndCreate("locker@techcommerce.store", "000000");
+            assertThat(attempt.status()).isEqualTo(RegistrationService.VerifyOtpResult.INVALID);
         }
 
         RegistrationService.VerifyOtpAndCreateResult blocked =

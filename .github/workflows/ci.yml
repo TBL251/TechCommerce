@@ -34,7 +34,7 @@ jobs:
           git fetch --depth=1 origin "${{ github.sha }}"
           git checkout -f FETCH_HEAD
 
-      - name: Run unit and integration tests (JDK 17)
+      - name: Run unit and integration tests on H2 & PostgreSQL 16 (JDK 17)
         run: |
           if [ -n "$JAVA_HOME_17_X64" ]; then
             export JAVA_HOME="$JAVA_HOME_17_X64"
@@ -42,6 +42,14 @@ jobs:
           fi
           chmod +x mvnw
           ./mvnw -B verify
+          ./mvnw -B test \
+            -Dspring.datasource.url=jdbc:postgresql://localhost:5432/techcommerce \
+            -Dspring.datasource.username=techcommerce \
+            -Dspring.datasource.password=techcommerce_dev \
+            -Dspring.datasource.driver-class-name=org.postgresql.Driver \
+            -Dspring.flyway.url=jdbc:postgresql://localhost:5432/techcommerce \
+            -Dspring.flyway.user=techcommerce \
+            -Dspring.flyway.password=techcommerce_dev
 
       - name: Verify production Docker image build
         run: |

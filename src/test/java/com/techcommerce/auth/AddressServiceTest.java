@@ -66,4 +66,21 @@ class AddressServiceTest {
         assertThat(remaining).hasSize(1);
         assertThat(remaining.get(0).isDefaultAddress()).isTrue();
     }
+
+    @Test
+    void enforcesMaxFiveAddressesLimitAndRejectsBlankFields() {
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                addressService.addAddress(user1.getId(), " ", "0901", "Địa chỉ", "Hà Nội", false)
+        ).isInstanceOf(IllegalArgumentException.class);
+
+        for (int i = 1; i <= AddressService.MAX_ADDRESSES_PER_USER; i++) {
+            addressService.addAddress(user1.getId(), "Người Nhận " + i, "090000000" + i, "Số " + i, "Hà Nội", false);
+        }
+        assertThat(addressService.listUserAddresses(user1.getId())).hasSize(5);
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                addressService.addAddress(user1.getId(), "Người Nhận 6", "0900000006", "Số 6", "Hà Nội", false)
+        ).isInstanceOf(IllegalArgumentException.class)
+         .hasMessageContaining("tối đa 5");
+    }
 }

@@ -40,5 +40,15 @@ class JspRenderingTest {
         assertThatThrownBy(() -> jdbcTemplate.update(
                 "INSERT INTO users (email, full_name, role, store_id) VALUES ('staff@techcommerce.store', 'Staff No Store', 'STAFF', NULL)"
         )).isInstanceOf(DataIntegrityViolationException.class);
+
+        // chk_users_role rejects invalid role
+        assertThatThrownBy(() -> jdbcTemplate.update(
+                "INSERT INTO users (email, full_name, role) VALUES ('badrole@techcommerce.store', 'Bad Role', 'SUPERUSER')"
+        )).isInstanceOf(DataIntegrityViolationException.class);
+
+        // chk_users_provider rejects invalid auth_provider
+        assertThatThrownBy(() -> jdbcTemplate.update(
+                "INSERT INTO users (email, full_name, role, auth_provider) VALUES ('badprov@techcommerce.store', 'Bad Prov', 'CUSTOMER', 'GITHUB')"
+        )).isInstanceOf(DataIntegrityViolationException.class);
     }
 }
