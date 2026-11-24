@@ -90,7 +90,7 @@
 <a href="#admin-main-content" class="skip-link visually-hidden-focusable">Chuyển tới nội dung chính</a>
 
 <!-- Stitch 272px Dark Obsidian Sidebar -->
-<aside class="fixed left-0 top-0 h-full w-[272px] bg-[#0b1120] text-inverse-on-surface z-50 hidden lg:flex flex-col justify-between shadow-lg">
+<aside id="admin-sidebar" class="fixed left-0 top-0 h-full w-[272px] bg-[#0b1120] text-inverse-on-surface z-50 hidden lg:flex flex-col justify-between shadow-lg">
     <div class="flex flex-col flex-1 overflow-y-auto">
         <div class="p-5 pb-4">
             <a href="${pageContext.request.contextPath}${currentUser.role == 'ADMIN' ? '/admin/users' : '/admin/dashboard'}" class="flex items-center gap-3 text-decoration-none" translate="no">
@@ -115,6 +115,7 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="text-xs font-semibold text-white truncate"><c:out value="${currentUser.fullName}"/></div>
+                        <div class="text-[11px] text-slate-400 font-mono truncate"><c:out value="${currentUser.email}"/></div>
                         <div class="text-[11px] text-tertiary-fixed-dim font-mono"><c:out value="${currentUser.role}"/></div>
                     </div>
                 </div>
@@ -195,7 +196,13 @@
 <div class="lg:pl-[272px] min-h-screen flex flex-col">
     <header class="sticky top-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl z-40 border-b border-surface-container-high px-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <a href="${pageContext.request.contextPath}/" class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg bg-surface-container text-on-surface text-decoration-none">
+            <button type="button"
+                    onclick="const s=document.getElementById('admin-sidebar');s.classList.toggle('hidden');s.classList.toggle('flex');"
+                    aria-label="Mở menu quản trị"
+                    class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg bg-surface-container text-on-surface border-0">
+                <span class="material-symbols-outlined text-[20px]">menu</span>
+            </button>
+            <a href="${pageContext.request.contextPath}/" class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg bg-surface-container text-on-surface text-decoration-none" aria-label="Về trang chủ">
                 <span class="material-symbols-outlined text-[20px]">home</span>
             </a>
             <span class="text-sm font-headline font-semibold text-on-surface">Trung tâm quản trị</span>

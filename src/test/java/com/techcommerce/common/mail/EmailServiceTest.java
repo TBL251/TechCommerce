@@ -31,6 +31,13 @@ class EmailServiceTest {
         assertThat(service.getRecordedEmails()).hasSize(5);
         verify(mockSender, times(5)).send(any(MimeMessage.class));
 
+        // Verify null JavaMailSender (test profile default) records without throwing
+        EmailService noOpSenderService = new EmailService(null, "no-reply@techcommerce.store");
+        noOpSenderService.sendRegistrationOtpEmail("noop@techcommerce.store", "NoOp User", "654321");
+        assertThat(noOpSenderService.getRecordedEmails()).hasSize(1);
+        noOpSenderService.clearRecordedEmails();
+        assertThat(noOpSenderService.getRecordedEmails()).isEmpty();
+
         String escaped = EmailTemplate.esc("<script>alert(\"a\" & 'b')</script>");
         assertThat(escaped)
                 .doesNotContain("<script>")
