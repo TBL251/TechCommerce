@@ -1,8 +1,10 @@
 package com.techcommerce.config;
 
 import com.techcommerce.auth.JwtAuthenticationFilter;
+import com.techcommerce.auth.JwtService;
 import com.techcommerce.auth.OAuth2AuthenticationSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.web.csrf.CsrfException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +40,7 @@ public class SecurityConfig {
             @Value("${app.oauth2.google.client-secret:}") String googleClientSecret
     ) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/payments/vnpay/ipn"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/payments/vnpay/ipn", "/WEB-INF/**", "/error/**"))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())
@@ -73,6 +75,10 @@ public class SecurityConfig {
                                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                                 response.setContentType("application/json;charset=UTF-8");
                                 response.getWriter().write("{\"status\":403,\"error\":\"Từ chối truy cập\"}");
+                            } else if (accessDeniedException instanceof CsrfException
+                                    && request.getRequestURI().startsWith("/auth/")
+                                    && JwtService.readCookie(request, JwtService.ACCESS_COOKIE_NAME).isPresent()) {
+                                response.sendRedirect(request.getContextPath() + "/");
                             } else {
                                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                                 request.getRequestDispatcher("/error/403").forward(request, response);

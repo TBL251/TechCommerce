@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -35,21 +35,21 @@ public class GlobalExceptionHandler {
         this.currentUserAdvice = currentUserAdvice;
     }
 
-    @GetMapping("/error/403")
+    @RequestMapping("/error/403")
     public String error403Page(HttpServletResponse response, Model model) {
         response.setStatus(HttpStatus.FORBIDDEN.value());
         model.addAttribute("errorMessage", "Bạn không có quyền truy cập tài nguyên hoặc chi nhánh này.");
         return "error/403";
     }
 
-    @GetMapping("/error/404")
+    @RequestMapping("/error/404")
     public String error404Page(HttpServletResponse response, Model model) {
         response.setStatus(HttpStatus.NOT_FOUND.value());
         model.addAttribute("errorMessage", "Không tìm thấy trang hoặc sản phẩm bạn yêu cầu.");
         return "error/404";
     }
 
-    @GetMapping("/error/500")
+    @RequestMapping("/error/500")
     public String error500Page(HttpServletResponse response, Model model) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         model.addAttribute("errorMessage", "Hệ thống đang bận hoặc gặp sự cố tạm thời. Vui lòng thử lại.");

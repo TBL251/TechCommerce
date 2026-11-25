@@ -121,12 +121,17 @@
             });
         });
 
+        let submitting = false;
         form.addEventListener('submit', (e) => {
             syncOtp();
-            if (hiddenOtp.value.length !== 6) {
+            if (hiddenOtp.value.length !== 6 || submitting) {
                 e.preventDefault();
-                digits[0].focus();
+                if (!submitting) digits[0].focus();
+                return;
             }
+            submitting = true;
+            const btn = form.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = true;
         });
     })();
 </script>

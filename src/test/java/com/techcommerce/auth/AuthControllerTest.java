@@ -270,8 +270,25 @@ class AuthControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
                 .andReturn();
-        assertThat(okRes.getResponse().getCookie(JwtService.ACCESS_COOKIE_NAME)).isNotNull();
+        Cookie accessCookie = okRes.getResponse().getCookie(JwtService.ACCESS_COOKIE_NAME);
+        assertThat(accessCookie).isNotNull();
         assertThat(okRes.getResponse().getCookie(JwtService.REFRESH_COOKIE_NAME)).isNotNull();
+
+        // Double-submit of verify-otp right after first click invalidated CSRF session (or with valid CSRF) redirects cleanly to /
+        mockMvc.perform(post("/auth/register/verify-otp")
+                        .cookie(accessCookie)
+                        .param("email", "verifyme@techcommerce.store")
+                        .param("otp", validCode))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        mockMvc.perform(post("/auth/register/verify-otp")
+                        .with(csrf())
+                        .cookie(accessCookie)
+                        .param("email", "verifyme@techcommerce.store")
+                        .param("otp", validCode))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
 
         // Expired OTP -> 410 Gone
         emailService.clearRecordedEmails();

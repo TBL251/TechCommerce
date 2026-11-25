@@ -201,6 +201,9 @@ public class AuthController {
                 return "redirect:/";
             }
             case EMAIL_TAKEN -> {
+                if (JwtService.readCookie(request, JwtService.ACCESS_COOKIE_NAME).isPresent()) {
+                    return "redirect:/";
+                }
                 response.setStatus(HttpStatus.CONFLICT.value());
                 model.addAttribute("error", "Email này đã được đăng ký. Vui lòng đăng nhập.");
                 return "auth/register-otp";
