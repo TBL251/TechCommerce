@@ -6,6 +6,11 @@ on:
   push:
     branches: [ "develop" ]
 
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
 jobs:
   verify:
     name: Maven Test & Docker Build Check
@@ -54,3 +59,54 @@ jobs:
       - name: Verify production Docker image build
         run: |
           docker build -t techcommerce:ci .
+
+  promote-to-main:
+    name: Auto-Merge develop to main (PR)
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    outputs:
+      merged: ${{ steps.merge.outputs.merged }}
+
+    steps:
+      - name: Create and merge Pull Request (develop -> main)
+        id: merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          # Check if develop has commits ahead of main
+          COMPARE=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/compare/main...develop")
+          AHEAD=$(echo "$COMPARE" | jq -r '.ahead_by')
+          if [ "$AHEAD" = "0" ]; then
+            echo "develop is already in sync with main. Skipping merge."
+            echo "merged=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Find existing open PR develop -> main or create a new one
+          PR_NUM=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/pulls?state=open&head=${REPO%%/*}:develop&base=main" \
+            | jq -r '.[0].number // empty')
+
+          if [ -z "$PR_NUM" ]; then
+            PR_NUM=$(curl -fsSL -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$REPO/pulls" \
+              -d '{"title":"chore(release): auto-merge develop into main","head":"develop","base":"main","body":"CI passed (Maven Test & Docker Build Check). Auto-merged from develop."}' \
+              | jq -r '.number')
+          fi
+
+          echo "Merging PR #$PR_NUM (develop -> main)..."
+          curl -fsSL -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/pulls/$PR_NUM/merge" \
+            -d '{"merge_method":"merge"}'
+          echo "merged=true" >> "$GITHUB_OUTPUT"
+
+  deploy-production:
+    name: Trigger CD Build & Deploy
+    needs: promote-to-main
+    if: needs.promote-to-main.outputs.merged == 'true'
+    uses: ./.github/workflows/cd.yml
+    secrets: inherit
