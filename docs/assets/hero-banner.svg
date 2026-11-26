@@ -1,165 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1090 126" width="100%" role="img" aria-label="TECHCOMMERCE">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1110 132" width="100%" role="img" aria-label="TECHCOMMERCE">
   <defs>
-    <!-- ROG / Hardware Metallic Sapphire Gradient for TECH -->
-    <linearGradient id="techStencil" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="22%" stop-color="#bae6fd"/>
-      <stop offset="50%" stop-color="#38bdf8"/>
-      <stop offset="52%" stop-color="#0284c7"/>
-      <stop offset="85%" stop-color="#1d4ed8"/>
-      <stop offset="100%" stop-color="#1e3a8a"/>
+    <!-- Full-Width Animated RGB Chroma Spectrum (userSpaceOnUse across all 12 letters) -->
+    <linearGradient id="rgbChroma" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1100" y2="110">
+      <stop offset="0%" stop-color="#00f5ff">
+        <animate attributeName="stop-color" values="#00f5ff;#a855f7;#ff007f;#00ffa3;#00f5ff" dur="6s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="25%" stop-color="#3b82f6">
+        <animate attributeName="stop-color" values="#3b82f6;#ff007f;#00ffa3;#00f5ff;#3b82f6" dur="6s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" stop-color="#a855f7">
+        <animate attributeName="stop-color" values="#a855f7;#00ffa3;#00f5ff;#3b82f6;#a855f7" dur="6s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="75%" stop-color="#ff007f">
+        <animate attributeName="stop-color" values="#ff007f;#00f5ff;#3b82f6;#a855f7;#ff007f" dur="6s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#00ffa3">
+        <animate attributeName="stop-color" values="#00ffa3;#3b82f6;#a855f7;#ff007f;#00ffa3" dur="6s" repeatCount="indefinite"/>
+      </stop>
     </linearGradient>
 
-    <!-- Cyber Emerald / Titanium Gradient for COMMERCE -->
-    <linearGradient id="commStencil" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="22%" stop-color="#a7f3d0"/>
-      <stop offset="50%" stop-color="#34d399"/>
-      <stop offset="52%" stop-color="#059669"/>
-      <stop offset="85%" stop-color="#047857"/>
-      <stop offset="100%" stop-color="#064e3b"/>
+    <!-- Vertical Chrome Specular Overlay (Bright Top Edge -> Rich Mid -> Deep Base) -->
+    <linearGradient id="chromeSheen" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="26%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="48%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#000000" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.08"/>
     </linearGradient>
 
-    <!-- Angular Hardware Letter Primitives (Height = 104) -->
-    <path id="L_T" d="M 10 0 L 72 0 L 66 20 L 46 20 L 46 94 L 34 104 L 24 104 L 24 20 L 0 20 Z"/>
-    <path id="L_E" d="M 14 0 L 68 0 L 60 19 L 21 19 L 21 42 L 57 42 L 49 61 L 21 61 L 21 85 L 62 85 L 68 104 L 10 104 L 0 94 L 0 14 Z"/>
-    <path id="L_C" d="M 16 0 L 58 0 L 68 10 L 68 29 L 47 29 L 47 19 L 21 19 L 21 85 L 47 85 L 47 75 L 68 75 L 68 92 L 56 104 L 12 104 L 0 92 L 0 16 Z"/>
-    <path id="L_H" d="M 0 10 L 10 0 L 21 0 L 21 42 L 51 42 L 51 0 L 62 0 L 72 10 L 72 94 L 62 104 L 51 104 L 51 61 L 21 61 L 21 104 L 10 104 L 0 94 Z"/>
-    <path id="L_O" fill-rule="evenodd" d="M 16 0 L 58 0 L 72 14 L 72 90 L 56 104 L 14 104 L 0 90 L 0 16 Z M 26 19 L 46 19 L 51 24 L 51 80 L 46 85 L 26 85 L 21 80 L 21 24 Z"/>
-    <path id="L_M" d="M 0 12 L 12 0 L 23 0 L 43 38 L 63 0 L 74 0 L 86 12 L 86 104 L 65 104 L 65 36 L 47 70 L 39 70 L 21 36 L 21 104 L 0 104 Z"/>
-    <path id="L_R" fill-rule="evenodd" d="M 14 0 L 56 0 L 70 14 L 70 46 L 55 60 L 72 104 L 49 104 L 35 62 L 21 62 L 21 104 L 0 104 L 0 14 Z M 21 19 L 46 19 L 50 23 L 50 38 L 46 42 L 21 42 Z"/>
+    <!-- Custom Cyber-Blade Futuristic Letterforms with Floating Energy Cores (Height = 106) -->
+    <!-- T: Swept Wing Top Blade + Detached Floating Vertical Pillar -->
+    <path id="CB_T" d="M 0 18 L 18 0 L 76 0 L 60 18 Z M 27 25 L 47 25 L 47 88 L 27 106 Z"/>
 
-    <!-- Group 1: TECH -->
-    <g id="wordTech">
-      <use href="#L_T" x="22" y="6"/>
-      <use href="#L_E" x="108" y="6"/>
-      <use href="#L_C" x="190" y="6"/>
-      <use href="#L_H" x="272" y="6"/>
+    <!-- E: Angular Blade Spine + Floating Diamond-Tipped Center Energy Core -->
+    <path id="CB_E" d="M 0 18 L 18 0 L 70 0 L 54 18 L 19 18 L 19 88 L 56 88 L 70 106 L 14 106 L 0 92 Z M 26 44 L 58 44 L 67 53 L 58 62 L 26 62 Z"/>
+
+    <!-- C: Swept Cyber-Blade C with Razor 45-Deg Terminals -->
+    <path id="CB_C" d="M 20 0 L 70 0 L 54 18 L 25 18 L 19 24 L 19 82 L 25 88 L 56 88 L 70 106 L 16 106 L 0 90 L 0 20 Z"/>
+
+    <!-- H: Twin Blade Pillars + Floating Detached Central Energy Bridge -->
+    <path id="CB_H" d="M 0 16 L 19 0 L 19 106 L 0 90 Z M 53 16 L 72 0 L 72 90 L 53 106 Z M 25 44 L 47 44 L 47 62 L 25 62 Z"/>
+
+    <!-- O: Split-Blade Futuristic Ring (Left & Right Interlocking Cyber Blades) -->
+    <path id="CB_O" d="M 20 0 L 52 0 L 36 18 L 25 18 L 19 24 L 19 82 L 28 88 L 14 106 L 0 92 L 0 20 Z M 58 0 L 72 14 L 72 86 L 52 106 L 20 106 L 36 88 L 47 88 L 53 82 L 53 24 L 44 18 Z"/>
+
+    <!-- M: Twin Outer Cyber Wings + Floating Suspended Center V-Blade -->
+    <path id="CB_M" d="M 0 18 L 18 0 L 30 0 L 43 26 L 33 42 L 19 18 L 19 106 L 0 90 Z M 56 0 L 70 0 L 88 18 L 88 90 L 69 106 L 69 18 L 44 64 L 35 48 Z"/>
+
+    <!-- R: Blade Spine + Detached Floating Upper Hood & Razor Diagonal Kick-Leg -->
+    <path id="CB_R" d="M 0 16 L 19 0 L 19 106 L 0 90 Z M 25 0 L 56 0 L 72 16 L 72 44 L 54 58 L 74 106 L 53 106 L 35 62 L 25 62 L 25 44 L 49 44 L 54 39 L 54 22 L 49 18 L 25 18 Z"/>
+
+    <!-- Full Wordmark Assembly: T E C H  //  C O M M E R C E -->
+    <g id="cyberWordmark">
+      <!-- TECH -->
+      <use href="#CB_T" x="22" y="10"/>
+      <use href="#CB_E" x="106" y="10"/>
+      <use href="#CB_C" x="188" y="10"/>
+      <use href="#CB_H" x="270" y="10"/>
+
+      <!-- Futuristic Dual-Blade Energy Slash Separator -->
+      <polygon points="354,96 368,24 373,24 359,96"/>
+      <polygon points="362,104 376,32 381,32 367,104"/>
+
+      <!-- COMMERCE -->
+      <use href="#CB_C" x="392" y="10"/>
+      <use href="#CB_O" x="474" y="10"/>
+      <use href="#CB_M" x="558" y="10"/>
+      <use href="#CB_M" x="658" y="10"/>
+      <use href="#CB_E" x="758" y="10"/>
+      <use href="#CB_R" x="840" y="10"/>
+      <use href="#CB_C" x="926" y="10"/>
+      <use href="#CB_E" x="1008" y="10"/>
     </g>
-
-    <!-- Group 2: COMMERCE -->
-    <g id="wordCommerce">
-      <use href="#L_C" x="378" y="6"/>
-      <use href="#L_O" x="460" y="6"/>
-      <use href="#L_M" x="546" y="6"/>
-      <use href="#L_M" x="646" y="6"/>
-      <use href="#L_E" x="746" y="6"/>
-      <use href="#L_R" x="828" y="6"/>
-      <use href="#L_C" x="914" y="6"/>
-      <use href="#L_E" x="996" y="6"/>
-    </g>
-
-    <!-- Industrial ROG Stencil Cut Mask (Black = Cut Away Gaps) -->
-    <mask id="stencilCuts">
-      <rect x="-40" y="-20" width="1160" height="160" fill="#ffffff"/>
-      <!-- Precision Horizontal Laser Micro-Slot across Midline -->
-      <rect x="0" y="55" width="1100" height="3.2" fill="#000000"/>
-      <!-- 45-Degree Industrial Stencil Slashes across Each Character Stem -->
-      <g stroke="#000000" stroke-width="4.2" stroke-linecap="square">
-        <!-- T -->
-        <line x1="36" y1="30" x2="76" y2="-10"/>
-        <line x1="38" y1="88" x2="72" y2="54"/>
-        <!-- E -->
-        <line x1="100" y1="44" x2="136" y2="8"/>
-        <line x1="126" y1="116" x2="164" y2="78"/>
-        <!-- C -->
-        <line x1="184" y1="46" x2="220" y2="10"/>
-        <line x1="208" y1="116" x2="246" y2="78"/>
-        <!-- H -->
-        <line x1="266" y1="42" x2="302" y2="6"/>
-        <line x1="314" y1="96" x2="352" y2="58"/>
-        <!-- C -->
-        <line x1="372" y1="46" x2="408" y2="10"/>
-        <line x1="396" y1="116" x2="434" y2="78"/>
-        <!-- O -->
-        <line x1="454" y1="42" x2="490" y2="6"/>
-        <line x1="498" y1="108" x2="540" y2="66"/>
-        <!-- M1 -->
-        <line x1="540" y1="46" x2="576" y2="10"/>
-        <line x1="598" y1="104" x2="640" y2="62"/>
-        <!-- M2 -->
-        <line x1="640" y1="46" x2="676" y2="10"/>
-        <line x1="698" y1="104" x2="740" y2="62"/>
-        <!-- E -->
-        <line x1="740" y1="44" x2="776" y2="8"/>
-        <line x1="766" y1="116" x2="804" y2="78"/>
-        <!-- R -->
-        <line x1="822" y1="42" x2="858" y2="6"/>
-        <line x1="864" y1="96" x2="906" y2="54"/>
-        <!-- C -->
-        <line x1="908" y1="46" x2="944" y2="10"/>
-        <line x1="932" y1="116" x2="970" y2="78"/>
-        <!-- E -->
-        <line x1="990" y1="44" x2="1026" y2="8"/>
-        <line x1="1016" y1="116" x2="1054" y2="78"/>
-      </g>
-    </mask>
-
-    <!-- Clip Paths to Confine PCB Circuit Traces Strictly Inside the Letter Bodies -->
-    <clipPath id="clipTech">
-      <use href="#wordTech"/>
-    </clipPath>
-    <clipPath id="clipComm">
-      <use href="#wordCommerce"/>
-    </clipPath>
   </defs>
 
-  <!-- Forward Speed Slant (-7 deg) for Hardware / ROG Stencil Aesthetic -->
-  <g transform="translate(12, 2) skewX(-7)">
+  <!-- Forward Cyber-Blade Speed Slant (-6 deg) -->
+  <g transform="translate(10, 2) skewX(-6)">
 
-    <!-- LAYER 1: Deep 3D Wireframe Echo (+9px, +9px) -->
-    <use href="#wordTech" transform="translate(9, 9)" fill="none" stroke="#1d4ed8" stroke-width="1.3" stroke-opacity="0.5"/>
-    <use href="#wordCommerce" transform="translate(9, 9)" fill="none" stroke="#047857" stroke-width="1.3" stroke-opacity="0.5"/>
+    <!-- CHROMATIC LAYER 1: Upper-Left Neon Cyan 3D Split Echo (-3.5px, -3px) -->
+    <use href="#cyberWordmark" transform="translate(-3.5, -3)" fill="none" stroke="#00f5ff" stroke-width="1.4" stroke-opacity="0.72"/>
 
-    <!-- LAYER 2: Solid 3D Chassis Extrusion (+4.5px, +4.5px) -->
-    <use href="#wordTech" transform="translate(4.5, 4.5)" fill="#081226" stroke="#38bdf8" stroke-width="1.4" stroke-opacity="0.8"/>
-    <use href="#wordCommerce" transform="translate(4.5, 4.5)" fill="#041f18" stroke="#34d399" stroke-width="1.4" stroke-opacity="0.8"/>
+    <!-- CHROMATIC LAYER 2: Lower-Right Laser Magenta 3D Split Echo (+9.5px, +9.5px) -->
+    <use href="#cyberWordmark" transform="translate(9.5, 9.5)" fill="none" stroke="#ff007f" stroke-width="1.5" stroke-opacity="0.72"/>
 
-    <!-- LAYER 3: Main Stencil-Cut Metallic Letter Faces + Internal PCB Traces -->
-    <g mask="url(#stencilCuts)">
-      <!-- Main Metallic Faces -->
-      <use href="#wordTech" fill="url(#techStencil)" stroke="#e0f2fe" stroke-width="0.9"/>
-      <use href="#wordCommerce" fill="url(#commStencil)" stroke="#d1fae5" stroke-width="0.9"/>
+    <!-- CHROMATIC LAYER 3: Mid 3D Dark Obsidian Chassis Extrusion (+4.5px, +4.5px) -->
+    <use href="#cyberWordmark" transform="translate(4.5, 4.5)" fill="#070312" stroke="url(#rgbChroma)" stroke-width="1.5" stroke-opacity="0.88"/>
 
-      <!-- Internal PCB Circuit Traces & IC Pads inside TECH -->
-      <g clip-path="url(#clipTech)" stroke="#bae6fd" stroke-width="1.6" fill="#0284c7" opacity="0.88">
-        <path d="M 20 18 L 48 18 L 58 28 L 58 92 M 108 26 L 120 38 L 120 82 L 154 82 M 190 34 L 204 48 L 204 88 L 238 88 M 272 22 L 284 34 L 284 74 L 334 74 L 334 98" fill="none"/>
-        <circle cx="58" cy="28" r="2.8"/>
-        <circle cx="58" cy="76" r="2.8"/>
-        <circle cx="120" cy="38" r="2.8"/>
-        <circle cx="154" cy="82" r="2.8"/>
-        <circle cx="204" cy="48" r="2.8"/>
-        <circle cx="238" cy="88" r="2.8"/>
-        <circle cx="284" cy="34" r="2.8"/>
-        <circle cx="334" cy="74" r="2.8"/>
-      </g>
+    <!-- LAYER 4: Main Animated RGB Chroma Cyber-Blade Faces (0, 0) -->
+    <use href="#cyberWordmark" fill="url(#rgbChroma)"/>
 
-      <!-- Internal PCB Circuit Traces & IC Pads inside COMMERCE -->
-      <g clip-path="url(#clipComm)" stroke="#a7f3d0" stroke-width="1.6" fill="#047857" opacity="0.88">
-        <path d="M 378 30 L 392 44 L 392 88 L 426 88 M 460 28 L 474 42 L 474 86 L 516 86 L 524 78 L 524 30 M 546 96 L 560 82 L 560 32 L 588 60 L 618 30 L 618 90 M 646 96 L 660 82 L 660 32 L 688 60 L 718 30 L 718 90 M 746 26 L 758 38 L 758 84 L 796 84 M 828 24 L 842 38 L 842 94 M 856 54 L 888 96 M 914 32 L 928 46 L 928 88 L 964 88 M 996 26 L 1008 38 L 1008 86 L 1048 86" fill="none"/>
-        <circle cx="392" cy="44" r="2.8"/>
-        <circle cx="426" cy="88" r="2.8"/>
-        <circle cx="474" cy="42" r="2.8"/>
-        <circle cx="524" cy="78" r="2.8"/>
-        <circle cx="560" cy="82" r="2.8"/>
-        <circle cx="588" cy="60" r="2.8"/>
-        <circle cx="618" cy="82" r="2.8"/>
-        <circle cx="660" cy="82" r="2.8"/>
-        <circle cx="688" cy="60" r="2.8"/>
-        <circle cx="718" cy="82" r="2.8"/>
-        <circle cx="758" cy="38" r="2.8"/>
-        <circle cx="796" cy="84" r="2.8"/>
-        <circle cx="842" cy="38" r="2.8"/>
-        <circle cx="888" cy="96" r="2.8"/>
-        <circle cx="928" cy="46" r="2.8"/>
-        <circle cx="964" cy="88" r="2.8"/>
-        <circle cx="1008" cy="38" r="2.8"/>
-        <circle cx="1048" cy="86" r="2.8"/>
-      </g>
-    </g>
-
-    <!-- Center ROG Slash Divider between TECH and COMMERCE -->
-    <polygon points="357,96 367,18 373,18 363,96" fill="#38bdf8" opacity="0.85"/>
-    <polygon points="364,96 374,18 378,18 368,96" fill="#34d399" opacity="0.85"/>
+    <!-- LAYER 5: Metallic Chrome Specular Sheen & Crisp White Rim (0, 0) -->
+    <use href="#cyberWordmark" fill="url(#chromeSheen)" stroke="#ffffff" stroke-width="0.75" stroke-opacity="0.82"/>
   </g>
 </svg>
