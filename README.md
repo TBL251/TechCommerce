@@ -1,8 +1,10 @@
 <div align="center"><a name="readme-top"></a>
 
-# TechCommerce
+<a href="https://techcommerce.store">
+  <img src="docs/assets/hero-banner.svg" alt="TechCommerce - Hệ thống Thương mại Điện tử Chuỗi Cửa hàng Công nghệ Đa Chi nhánh" width="100%"/>
+</a>
 
-**Hệ thống Thương mại Điện tử Chuỗi Cửa hàng Công nghệ Đa Chi nhánh**
+<br/>
 
 Đồng bộ tồn kho thực tế 3 miền (Hà Nội · TP.HCM · Đà Nẵng), đặt giữ hàng nhận tại quầy sau 15 phút,<br/>
 thanh toán COD & VNPay, theo dõi tiến trình đơn hàng qua WebSocket và đổi trả trực tuyến trong 7 ngày.
