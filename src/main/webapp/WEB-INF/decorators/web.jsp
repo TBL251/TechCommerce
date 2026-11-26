@@ -325,5 +325,22 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function () {
+        const key = 'tc_scroll_' + location.pathname;
+        const saved = sessionStorage.getItem(key);
+        if (saved !== null) {
+            sessionStorage.removeItem(key);
+            const y = parseInt(saved, 10) || 0;
+            window.scrollTo({ top: y, behavior: 'instant' });
+            requestAnimationFrame(function () { window.scrollTo({ top: y, behavior: 'instant' }); });
+        }
+        document.addEventListener('submit', function (e) {
+            if (!e.defaultPrevented) {
+                sessionStorage.setItem(key, String(window.scrollY));
+            }
+        });
+    })();
+</script>
 </body>
 </html>
