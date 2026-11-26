@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html class="h-full" lang="vi">
 <head>
@@ -122,31 +123,36 @@
             </div>
         </c:if>
 
+        <c:set var="reqUri" value="${not empty requestScope['jakarta.servlet.forward.request_uri'] ? requestScope['jakarta.servlet.forward.request_uri'] : pageContext.request.requestURI}"/>
+        <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+        <c:set var="navActive" value="bg-primary-container text-white font-semibold shadow-sm"/>
+        <c:set var="navIdle" value="text-slate-300 hover:bg-white/10 hover:text-white"/>
+
         <nav class="flex-1 px-3 space-y-5">
             <div class="space-y-1">
                 <div class="px-3 py-1 text-[11px] font-label font-semibold text-slate-400 uppercase tracking-wider">Vận hành chi nhánh</div>
-                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                   href="${pageContext.request.contextPath}/admin/dashboard">
+                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/dashboard') ? navActive : navIdle} text-decoration-none transition-colors"
+                   href="${ctx}/admin/dashboard">
                     <span class="material-symbols-outlined text-[19px]">bar_chart</span>Báo cáo &amp; Doanh thu
                 </a>
-                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                   href="${pageContext.request.contextPath}/admin/orders">
+                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/orders') ? navActive : navIdle} text-decoration-none transition-colors"
+                   href="${ctx}/admin/orders">
                     <span class="material-symbols-outlined text-[19px]">receipt_long</span>Đơn hàng chi nhánh
                 </a>
-                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                   href="${pageContext.request.contextPath}/admin/returns">
+                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/returns') ? navActive : navIdle} text-decoration-none transition-colors"
+                   href="${ctx}/admin/returns">
                     <span class="material-symbols-outlined text-[19px]">assignment_return</span>Yêu cầu đổi trả
                 </a>
-                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                   href="${pageContext.request.contextPath}/admin/inventory">
+                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/inventory') ? navActive : navIdle} text-decoration-none transition-colors"
+                   href="${ctx}/admin/inventory">
                     <span class="material-symbols-outlined text-[19px]">inventory_2</span>Tồn kho SKU
                 </a>
-                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                   href="${pageContext.request.contextPath}/admin/chat">
+                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/chat') ? navActive : navIdle} text-decoration-none transition-colors"
+                   href="${ctx}/admin/chat">
                     <span class="material-symbols-outlined text-[19px]">chat_bubble</span>Chat hỗ trợ
                 </a>
-                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                   href="${pageContext.request.contextPath}/admin/questions">
+                <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/questions') ? navActive : navIdle} text-decoration-none transition-colors"
+                   href="${ctx}/admin/questions">
                     <span class="material-symbols-outlined text-[19px]">quiz</span>Hỏi đáp Q&amp;A
                 </a>
             </div>
@@ -154,20 +160,20 @@
             <c:if test="${currentUser.role == 'ADMIN'}">
                 <div class="space-y-1">
                     <div class="px-3 py-1 text-[11px] font-label font-semibold text-slate-400 uppercase tracking-wider">Quản trị toàn chuỗi (ADMIN)</div>
-                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg bg-primary-container text-white font-semibold shadow-sm text-decoration-none transition-colors"
-                       href="${pageContext.request.contextPath}/admin/users">
+                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/users') ? navActive : navIdle} text-decoration-none transition-colors"
+                       href="${ctx}/admin/users">
                         <span class="material-symbols-outlined text-[19px]">group</span>Nhân sự &amp; Cấp tài khoản STAFF
                     </a>
-                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                       href="${pageContext.request.contextPath}/admin/stores">
+                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/stores') ? navActive : navIdle} text-decoration-none transition-colors"
+                       href="${ctx}/admin/stores">
                         <span class="material-symbols-outlined text-[19px]">hub</span>Hệ thống chi nhánh
                     </a>
-                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                       href="${pageContext.request.contextPath}/admin/catalog">
+                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/catalog') ? navActive : navIdle} text-decoration-none transition-colors"
+                       href="${ctx}/admin/catalog">
                         <span class="material-symbols-outlined text-[19px]">category</span>Danh mục &amp; Sản phẩm
                     </a>
-                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white text-decoration-none transition-colors"
-                       href="${pageContext.request.contextPath}/admin/vouchers">
+                    <a class="flex items-center gap-3 px-3 py-2 text-xs rounded-lg ${fn:startsWith(reqUri, ctx += '/admin/vouchers') ? navActive : navIdle} text-decoration-none transition-colors"
+                       href="${ctx}/admin/vouchers">
                         <span class="material-symbols-outlined text-[19px]">confirmation_number</span>Mã giảm giá
                     </a>
                 </div>
