@@ -230,17 +230,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     (function () {
-        const key = 'tc_scroll_' + location.pathname + location.search;
-        const saved = sessionStorage.getItem(key);
-        if (saved !== null) {
-            sessionStorage.removeItem(key);
-            const y = parseInt(saved, 10) || 0;
-            window.scrollTo({ top: y, behavior: 'instant' });
-            requestAnimationFrame(function () { window.scrollTo({ top: y, behavior: 'instant' }); });
-        }
-        function saveScroll() { sessionStorage.setItem(key, String(window.scrollY)); }
-        document.addEventListener('submit', function (e) { if (!e.defaultPrevented) saveScroll(); });
-        window.addEventListener('pagehide', saveScroll);
+        document.addEventListener('submit', async function (e) {
+            const form = e.target;
+            if (e.defaultPrevented || !form || (form.method || '').toLowerCase() !== 'post' || form.action.includes('/auth/')) return;
+            e.preventDefault();
+            const btn = e.submitter || form.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = true;
+            try {
+                const body = form.enctype === 'multipart/form-data' ? new FormData(form) : new URLSearchParams(new FormData(form));
+                const res = await fetch(form.action, { method: 'POST', body: body, credentials: 'same-origin' });
+                if (res.ok && new URL(res.url, location.origin).pathname === location.pathname) {
+                    const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+                    const newMain = doc.querySelector('main'), curMain = document.querySelector('main');
+                    if (newMain && curMain) curMain.innerHTML = newMain.innerHTML;
+                } else {
+                    location.assign(res.url);
+                }
+            } catch (_) {
+                form.submit();
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        });
     })();
 </script>
 </body>
